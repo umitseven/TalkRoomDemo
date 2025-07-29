@@ -1,0 +1,96 @@
+﻿@using TalkRoomDemo.DtoLayer.Dtos.RegisterDto
+@model AppUserRegisterDto
+@{
+    Layout = null;
+
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <link rel="stylesheet" href="~/Login/css/index.css">
+    <link rel="stylesheet" href="~/Login/css/main.css">
+    <title>TalkRoom</title>
+</head>
+
+<body>
+    <img src="~/Login/image/Adsız tasarım (5).svg" alt="background" class="bg">
+    <div class="login-page">
+        <main class="main">
+            <div class="authBox">
+                <div class="main-form">
+
+                    <form method="post" asp-controller="Register">
+                        <div class="input-groups">
+                            <div class="main-form-header">
+                                <h1>TalkRoom</h1>
+                                <p>Hoş geldin</p>
+                            </div>
+                            <div class="email-wrapper">
+                                <label for="emailORphone">
+                                    ADINIZI GİRİNİZ
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" asp-for="Name" id="emailORphone" required="">
+                            </div>
+                            <div class="email-wrapper">
+                                <label for="emailORphone">
+                                    SOYADINIZI GİRİNİZ
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" asp-for="Surname" id="emailORphone" required="">
+                            </div>
+                            <div class="email-wrapper">
+                                <label for="emailORphone">
+                                    KULLANICI ADINIZI GİRİNİZ
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" asp-for="UserName" id="emailORphone" required="">
+                            </div>
+                            <div class="email-wrapper">
+                                <label for="emailORphone">
+                                    MAİL ADRESİNİZİ GİRİNİZ
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="email" asp-for="Email" id="emailORphone" required="">
+                            </div>
+                            <div class="password-wrapper">
+                                <label for="password">
+                                    ŞİFRENİZ
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="password" asp-for="Password" id="password" required="">
+                            </div>
+                            <div class="password-wrapper">
+                                <label for="password">
+                                    ŞİFRENİZ TEKRAR GİRİNİZ
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="password" asp-for="ConfirmPassword" id="password" required="">
+                               
+                            </div>
+                            
+                        </div>
+                       <br /><br />
+                        <div class="login">
+                            <input type="submit" value="Kayıt Ol" style="background: var(--btn-bg);
+    transition: background-color 0.17s ease;
+    --btn-bg-hover: var(--btn-bg-hover);"></input>
+                        </div>
+                        <div class="small-register">
+                            <div asp-validation-summary="ModelOnly"></div>
+                            <span>bir hesabım var</span>
+                            <a href="~/Login/Index">Giriş Yap</a>
+                        </div>
+                    </form>
+                </div>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <script src="~/Login/js/script.js"></script>
+</body>
+
+</html>

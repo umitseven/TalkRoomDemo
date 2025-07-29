@@ -1,9 +1,58 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36301.6 d17.14
+VisualStudioVersion = 17.14.36301.6
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalkRoomDemo.EntityLayer", "TalkRoomDemo.EntityLayer\TalkRoomDemo.EntityLayer.csproj", "{7AFD12E9-56BB-4397-BE84-08B8B5843557}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalkRoomDemo.businessLayer", "TalkRoomDemo.businessLayer\TalkRoomDemo.businessLayer.csproj", "{35A02832-AA8B-4FB9-8204-3D6D7FFAB508}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7AFD12E9-56BB-4397-BE84-08B8B5843557} = {7AFD12E9-56BB-4397-BE84-08B8B5843557}
+		{93DDDC47-C6AA-49C8-AAA0-41D848643B62} = {93DDDC47-C6AA-49C8-AAA0-41D848643B62}
+		{E11711D7-380F-4CB2-933A-9A2C25B00591} = {E11711D7-380F-4CB2-933A-9A2C25B00591}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalkRoomDemo.DataAccessLayer", "TalkRoomDemo.DataAccessLayer\TalkRoomDemo.DataAccessLayer.csproj", "{93DDDC47-C6AA-49C8-AAA0-41D848643B62}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7AFD12E9-56BB-4397-BE84-08B8B5843557} = {7AFD12E9-56BB-4397-BE84-08B8B5843557}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalkRoomDemo.DtoLayer", "TalkRoomDemo.DtoLayer\TalkRoomDemo.DtoLayer.csproj", "{E11711D7-380F-4CB2-933A-9A2C25B00591}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalkRoomDemo.PresentationLayer", "TalkRoomDemo.PresentationLayer\TalkRoomDemo.PresentationLayer.csproj", "{B180827E-4C4D-448E-89AE-1080B2B72049}"
+	ProjectSection(ProjectDependencies) = postProject
+		{35A02832-AA8B-4FB9-8204-3D6D7FFAB508} = {35A02832-AA8B-4FB9-8204-3D6D7FFAB508}
+		{7AFD12E9-56BB-4397-BE84-08B8B5843557} = {7AFD12E9-56BB-4397-BE84-08B8B5843557}
+		{93DDDC47-C6AA-49C8-AAA0-41D848643B62} = {93DDDC47-C6AA-49C8-AAA0-41D848643B62}
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7AFD12E9-56BB-4397-BE84-08B8B5843557}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AFD12E9-56BB-4397-BE84-08B8B5843557}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AFD12E9-56BB-4397-BE84-08B8B5843557}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AFD12E9-56BB-4397-BE84-08B8B5843557}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35A02832-AA8B-4FB9-8204-3D6D7FFAB508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35A02832-AA8B-4FB9-8204-3D6D7FFAB508}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35A02832-AA8B-4FB9-8204-3D6D7FFAB508}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35A02832-AA8B-4FB9-8204-3D6D7FFAB508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93DDDC47-C6AA-49C8-AAA0-41D848643B62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93DDDC47-C6AA-49C8-AAA0-41D848643B62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93DDDC47-C6AA-49C8-AAA0-41D848643B62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93DDDC47-C6AA-49C8-AAA0-41D848643B62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E11711D7-380F-4CB2-933A-9A2C25B00591}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E11711D7-380F-4CB2-933A-9A2C25B00591}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E11711D7-380F-4CB2-933A-9A2C25B00591}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E11711D7-380F-4CB2-933A-9A2C25B00591}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B180827E-4C4D-448E-89AE-1080B2B72049}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B180827E-4C4D-448E-89AE-1080B2B72049}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B180827E-4C4D-448E-89AE-1080B2B72049}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B180827E-4C4D-448E-89AE-1080B2B72049}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection

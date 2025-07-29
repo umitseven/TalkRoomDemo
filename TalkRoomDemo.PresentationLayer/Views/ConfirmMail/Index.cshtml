@@ -1,0 +1,68 @@
+﻿@model ConfirmMailViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="#" type="image/x-icon">
+    <link rel="stylesheet" href="~/Login/css/index.css">
+    <link rel="stylesheet" href="~/Login/css/main.css">
+    <title>TalkRoom</title>
+</head>
+
+<body>
+    <img src="~/Login/image/Adsız tasarım (5).svg" alt="background" class="bg">
+    <div class="login-page">
+        <main class="main">
+            <div class="authBox">
+                <div class="main-form">
+
+                    <form method="post">
+                        <div class="input-groups">
+                            <div class="main-form-header">
+                                <h1>TalkRoom</h1>
+                                <p>Mail Kontrol</p>
+                            </div>
+                            <div class="email-wrapper">
+                                <label for="emailORphone">
+                                    Mail adresiniz
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" asp-for="Email" value="@ViewBag.v" id="emailORphone" readonly>
+                            </div>
+                            <div class="password-wrapper">
+                                <label for="password">
+                                    Mail Adresinize gelen 6 haneli kodu giriniz
+                                    <span class="required">*</span>
+                                </label>
+                                <input type="text" asp-for="ConfirmCode" id="password">
+                            </div>
+                        </div>
+                        <div class="forgot-password">
+                            <a href="#">Şifremi unuttum</a>
+                        </div>
+                        <div class="login">
+                            <div asp-validation-summary="All" style="color:red"></div>
+                            <br />
+                            <input type="submit" value="Giriş Yap" style="background: var(--btn-bg);
+    transition: background-color 0.17s ease;
+    --btn-bg-hover: var(--btn-bg-hover);">
+                        </div>
+                        <div class="small-register">
+
+                            <span>bir hesabım yok</span>
+                            <a href="/Register/Index">Kayıt Ol</a>
+                        </div>
+                    </form>
+                </div>
+        </main>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <script src="~/Login/js/script.js"></script>
+</body>
+
+</html>
