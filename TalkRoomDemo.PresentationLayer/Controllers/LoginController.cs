@@ -30,7 +30,11 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                 var user = await _userManager.FindByNameAsync(loginViewModel.UserName);
                 if (user.EmailConfirmed == true)
                 {
-                    return RedirectToAction("Index", "TalkRoom");
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return RedirectToAction("Index", "ConfirmMail");
                 }
                
             }

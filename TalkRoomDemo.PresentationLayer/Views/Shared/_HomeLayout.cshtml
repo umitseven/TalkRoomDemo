@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>TalkRoom</title>
+    <link rel="stylesheet" href="~/css/home.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+    <div class="app-container">
+        <aside class="servers-bar">
+            <!-- Sunucu Listesi -->
+            <div class="first-chanel-server">
+                <img class="server" src="~/login\image\logo.svg" />
+                <div class="element"></div>
+            </div>
+            <div><img class="server" src="~/login\image\logo.svg" /></div>
+            
+            
+        </aside>
+
+        <aside class="channels-bar">
+            <div class="chanel-header">kanal ismi olacak bölüm</div>
+            <div style="border-bottom:2px solid #4c5058" class="element"></div>
+            <!-- Kanal Listesi -->
+            <div class="channel"># genel Sohbet</div>
+            <div class="channel"># Sesli Sohbet
+                <button id="openModalBtn" class="add-room-btn">＋</button>
+            </div> <!-- bu kısımda + işaretleri olacak ve buton olacaklar sayfada model açmasına yarayacak -->
+            <div id="roomModal" class="modal">
+                <div class="modal-content">
+                    <div class="cls-h">
+                        <span id="closeModalBtn" class="close">&times;</span>
+                        <h2>Yeni Oda Oluştur</h2>
+                    </div>
+                    <form id="createRoomForm">
+                        <input type="text" id="roomName" placeholder="Oda adı" required />
+                        <button type="submit">Odayı Oluştur</button>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- Kullanıcı Paneli -->
+            <div class="user-panel">
+                <div class="user-info">
+                    <img src="~/Login/image/pp.jpg" alt="Profil" class="profile-pic">
+                    <div class="user-details">
+                        <div class="username">ümit</div>
+                        <div class="status online"></div>
+                    </div>
+                </div>
+                <div class="user-actions">
+                    <button class="icon-btn mic-btn" onclick="toggleVolumePopup()">🎤</button>
+
+                    <div id="volume-popup" class="volume-popup">
+                        <label class="volume-label">
+                            <input type="checkbox" id="muteCheckbox" />
+                            <span>Mute</span>
+                        </label>
+                        <input type="range" min="0" max="1" step="0.01" value="1" id="volumeSlider" />
+                    </div>
+
+                    <a href="/ayarlar" class="icon-btn settings-btn" style="text-decoration: none; margin-right: 5px;">⚙️</a>
+                </div>
+            </div>
+
+        </aside>
+
+        <main class="chat-area">
+            <header class="chat-header">
+                <h2></h2>
+            </header>
+
+            <section class="chat-messages">
+                @RenderBody() <!-- Sayfa içeriği buraya gelecek -->
+            </section>
+
+            <footer class="message-input">
+                <form method="post" class="message-Box">
+                    <input type="text" name="message" placeholder="Mesajını yaz..." autocomplete="off" />
+                    <button type="submit">➤</button>
+                </form>
+            </footer>
+        </main>
+        <aside class="channels-bar">
+            <div class="chanel-header" style="font-size:18px; font-weight:600; ">Arkadaş Listesi</div>
+            <div style="border-bottom:2px solid #4c5058" class="element"></div>
+            <!-- arkadaş listesi -->
+            <div class="channel">
+                <div class="user-info">
+                    <img src="~/Login/image/pp.jpg" alt="Profil" class="profile-pic">
+                    <div class="user-details">
+                        <div class="username">ümit</div> <!-- bu kısıma arkadaş listesinde olan kişilerin isimleri gelecek-->
+                        <div class="status online"></div> <!-- bı kısıma da backendde arkadaşlardan birisi çevrim içi olursa (bool değikeni atanacak) yeşil olmazsa gri olacak-->
+                        <!-- bu kısıma bir a tagı ya da link ver basıldığı zaman özel sohbet sayfası açılsın-->
+                    </div>
+                </div>
+            </div>
+            <div class="channel">
+                <div class="user-info">
+                    <img src="~/Login/image/pp.jpg" alt="Profil" class="profile-pic">
+                    <div class="user-details">
+                        <div class="username">ümit</div> <!-- bu kısıma arkadaş listesinde olan kişilerin isimleri gelecek-->
+                        <div class="status online"></div> <!-- bı kısıma da backendde arkadaşlardan birisi çevrim içi olursa (bool değikeni atanacak) yeşil olmazsa gri olacak-->
+                    </div>
+                </div>
+            </div>
+            
+
+
+            <!-- Kullanıcı Paneli -->
+           
+
+        </aside>
+    </div>
+    <script src="~/js/home.js"></script>
+</body>
+</html>
