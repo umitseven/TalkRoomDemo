@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.Security.Principal;
 using TalkRoomDemo.EntityLayer.Concrete;
 using TalkRoomDemo.PresentationLayer.Models;
 
@@ -28,6 +32,16 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(loginViewModel.UserName);
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim("UserName", user.UserName ?? user.Name),
+                };
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                await HttpContext.SignInAsync("Identity.Application", new ClaimsPrincipal(claimsIdentity));
+
+                
                 if (user.EmailConfirmed == true)
                 {
                     return RedirectToAction("Index", "Home");

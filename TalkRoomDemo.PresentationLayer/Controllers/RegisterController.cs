@@ -64,6 +64,7 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                     client.Disconnect(true);
 
                     TempData["mail"] = appUserRegisterDto.Email;
+                    TempData["name"] = appUserRegisterDto.UserName;
                     return RedirectToAction("Index", "ConfirmMail");
                 }
                 else

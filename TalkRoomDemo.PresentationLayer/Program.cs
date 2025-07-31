@@ -1,10 +1,12 @@
 using TalkRoomDemo.DataAccessLayer.AppDbContext;
 using TalkRoomDemo.EntityLayer.Concrete;
+using TalkRoomDemo.PresentationLayer.Hubs;
 using TalkRoomDemo.PresentationLayer.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddSignalR();
 builder.Services.AddDbContext<Context>();
 builder.Services.AddIdentity<AppUser,AppRole>().AddEntityFrameworkStores<Context>().AddErrorDescriber<CustomIdentityValidator>();
 
@@ -30,4 +32,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Index}/{id?}");
 
+app.MapHub<ChatHub>("/chatHub");
 app.Run();

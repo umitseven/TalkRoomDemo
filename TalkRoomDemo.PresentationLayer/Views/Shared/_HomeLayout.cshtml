@@ -26,9 +26,7 @@
             <div style="border-bottom:2px solid #4c5058" class="element"></div>
             <!-- Kanal Listesi -->
             <div class="channel"># genel Sohbet</div>
-            <div class="channel"># Sesli Sohbet
-                <button id="openModalBtn" class="add-room-btn">＋</button>
-            </div> <!-- bu kısımda + işaretleri olacak ve buton olacaklar sayfada model açmasına yarayacak -->
+            <div class="channel"># Sesli Sohbet</div>
             <div id="roomModal" class="modal">
                 <div class="modal-content">
                     <div class="cls-h">
@@ -48,7 +46,7 @@
                 <div class="user-info">
                     <img src="~/Login/image/pp.jpg" alt="Profil" class="profile-pic">
                     <div class="user-details">
-                        <div class="username">ümit</div>
+                        <div class="username">@User.FindFirst("UserName")?.Value</div>
                         <div class="status online"></div>
                     </div>
                 </div>
@@ -71,19 +69,14 @@
 
         <main class="chat-area">
             <header class="chat-header">
-                <h2></h2>
+                <button id="openModalBtn" class="add-room-btn">＋</button>
             </header>
 
             <section class="chat-messages">
                 @RenderBody() <!-- Sayfa içeriği buraya gelecek -->
             </section>
 
-            <footer class="message-input">
-                <form method="post" class="message-Box">
-                    <input type="text" name="message" placeholder="Mesajını yaz..." autocomplete="off" />
-                    <button type="submit">➤</button>
-                </form>
-            </footer>
+            
         </main>
         <aside class="channels-bar">
             <div class="chanel-header" style="font-size:18px; font-weight:600; ">Arkadaş Listesi</div>
@@ -93,7 +86,9 @@
                 <div class="user-info">
                     <img src="~/Login/image/pp.jpg" alt="Profil" class="profile-pic">
                     <div class="user-details">
-                        <div class="username">ümit</div> <!-- bu kısıma arkadaş listesinde olan kişilerin isimleri gelecek-->
+                        <div class="username">
+                            @User.FindFirst("UserName")?.Value
+                        </div> <!-- bu kısıma arkadaş listesinde olan kişilerin isimleri gelecek-->
                         <div class="status online"></div> <!-- bı kısıma da backendde arkadaşlardan birisi çevrim içi olursa (bool değikeni atanacak) yeşil olmazsa gri olacak-->
                         <!-- bu kısıma bir a tagı ya da link ver basıldığı zaman özel sohbet sayfası açılsın-->
                     </div>
@@ -103,17 +98,11 @@
                 <div class="user-info">
                     <img src="~/Login/image/pp.jpg" alt="Profil" class="profile-pic">
                     <div class="user-details">
-                        <div class="username">ümit</div> <!-- bu kısıma arkadaş listesinde olan kişilerin isimleri gelecek-->
+                        <div class="username">yeni arkadaş</div> <!-- bu kısıma arkadaş listesinde olan kişilerin isimleri gelecek-->
                         <div class="status online"></div> <!-- bı kısıma da backendde arkadaşlardan birisi çevrim içi olursa (bool değikeni atanacak) yeşil olmazsa gri olacak-->
                     </div>
                 </div>
             </div>
-            
-
-
-            <!-- Kullanıcı Paneli -->
-           
-
         </aside>
     </div>
     <script src="~/js/home.js"></script>

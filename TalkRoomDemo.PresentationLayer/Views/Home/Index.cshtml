@@ -1,3 +1,21 @@
 ﻿@{
     Layout = "_HomeLayout";
 }
+<link rel="stylesheet" href="~/css/home.css" />
+<main class="chat-wrapper">
+    <section class="chat-box" id="chatBox">
+        <ul id="messagesList" class="messages-list"></ul>
+    </section>
+
+    <footer class="message-input-container">
+        <form class="message-form" id="messageForm">
+            <input type="text" id="messageInput" name="message" placeholder="Mesajını yaz..." autocomplete="off" />
+            <button type="button" id="sendButton">➤</button>
+        </form>
+    </footer>
+</main>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script>
+        window.currentUser = window.currentUser = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.FindFirst("UserName")?.Value));
+    </script>
+<script src="~/js/chat.js"></script>

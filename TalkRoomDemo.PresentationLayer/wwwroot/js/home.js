@@ -8,7 +8,9 @@
     const volumePopup = document.getElementById("volume-popup");
     const volumeSlider = document.getElementById("volumeSlider");
     const muteCheckbox = document.getElementById("muteCheckbox");
+    const chatBox = document.querySelector('.chat-box');
 
+    chatBox.scrollTop = chatBox.scrollHeight;
     async function initMic() {
         if (!stream) {
         stream = await navigator.mediaDevices.getUserMedia({ audio: true });
