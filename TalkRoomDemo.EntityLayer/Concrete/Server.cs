@@ -1,11 +1,24 @@
-﻿namespace TalkRoomDemo.EntityLayer.Concrete
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TalkRoomDemo.EntityLayer.Concrete
 {
     public class Server
     {
-       public int ID { get; set; }
-       public string Name { get; set; }
-       
-      
+        public int Id { get; set; }
+        public string Name { get; set; }
 
+        // Sunucuyu oluşturan kullanıcı
+        public int CreatorUserId { get; set; } // Oluşturan kullanıcının ID'si
+        public AppUser CreatorUser { get; set; } // Oluşturan kullanıcının bilgileri
+
+        // Sunucuya ait mesajlar
+        public ICollection<ServerMessage> Messages { get; set; } = new List<ServerMessage>(); // Sunucu mesajları
+
+        // Sunucu üyeleri
+        public ICollection<ServerUser> ServerUsers { get; set; } = new List<ServerUser>(); // Sunucu üyeleri
     }
 }

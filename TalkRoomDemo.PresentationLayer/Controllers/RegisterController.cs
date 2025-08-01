@@ -37,7 +37,6 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                     Surname = appUserRegisterDto.Surname,
                     Name = appUserRegisterDto.Name,
                     Email = appUserRegisterDto.Email,
-                    District = "sincan",
                     ImageUrl ="www.google.com",
                     ConfirmCode =Code
                 };

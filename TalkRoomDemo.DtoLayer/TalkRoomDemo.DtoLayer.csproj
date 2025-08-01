@@ -19,11 +19,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Dtos\FriendRequestDto\" />
-    <Folder Include="Dtos\ProfileUpdateDto\" />
-    <Folder Include="Dtos\ServerInviteDto\" />
-    <Folder Include="Dtos\CreateMessageDto\" />
-  </ItemGroup>
-
 </Project>
