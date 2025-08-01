@@ -39,7 +39,35 @@
                     </form>
                 </div>
             </div>
-
+            <div id="roomModal2" class="modal">
+                <div class="modal-content">
+                    <div class="cls-h">
+                        <span id="closeModalBtn2" class="close">&times;</span>
+                        <h2>Davet Kodunuz</h2>
+                    </div>
+                    <form id="createRoomForm2">
+                        <input type="text" id="roomName2" value="#111111" readonly required />
+                        <button type="submit">Linki Kopyala</button>
+                    </form>
+                </div>
+            </div>
+            <div id="copyNotification" style="
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4BB543;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s, bottom 0.5s;
+    font-weight: 600;
+    z-index: 1000;
+">
+                Kopyalandı!
+            </div>
 
             <!-- Kullanıcı Paneli -->
             <div class="user-panel">
@@ -70,6 +98,7 @@
         <main class="chat-area">
             <header class="chat-header">
                 <button id="openModalBtn" class="add-room-btn">＋</button>
+                
             </header>
 
             <section class="chat-messages">
@@ -79,7 +108,12 @@
             
         </main>
         <aside class="channels-bar">
-            <div class="chanel-header" style="font-size:18px; font-weight:600; ">Arkadaş Listesi</div>
+            <div class="chanel-header" style="font-size:18px;display:flex; font-weight:600;padding: 10px; margin-top: 1rem; font-size: large;flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start; ">
+                Arkadaş Listesi
+                <button id="openModalBtn2" class="add-room-btn">＋</button>
+            </div>
             <div style="border-bottom:2px solid #4c5058" class="element"></div>
             <!-- arkadaş listesi -->
             <div class="channel">
