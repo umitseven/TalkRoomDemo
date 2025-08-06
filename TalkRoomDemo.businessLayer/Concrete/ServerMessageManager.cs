@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TalkRoomDemo.businessLayer.Abstract;
 using TalkRoomDemo.DataAccessLayer.Abstract;
+using TalkRoomDemo.DtoLayer.Dtos;
 using TalkRoomDemo.EntityLayer.Concrete;
 
 namespace TalkRoomDemo.businessLayer.Concrete
@@ -17,6 +18,12 @@ namespace TalkRoomDemo.businessLayer.Concrete
         {
             _serverMessageDal = serverMessageDal;
         }
+
+        public async Task<List<ServerMessageDto>> GetAllServerMessagesByServerIdAsync(int serverId, int page = 1, int pageSize = 20)
+        {
+            return await _serverMessageDal.GetAllServerMessagesByServerIdAsync(serverId, page, pageSize);
+        }
+
         public void TDelete(ServerMessage entity)
         {
             _serverMessageDal.Delete(entity);

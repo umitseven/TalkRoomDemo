@@ -8,6 +8,8 @@ namespace TalkRoomDemo.EntityLayer.Concrete
 {
     public class ServerUser
     {
+        public int ServerUserId { get; set; } // Bağlı olduğu sunucunun ID'si
+
         public int ServerId { get; set; } // Bağlı olduğu sunucunun ID'si
         public Server Server { get; set; } // Bağlı olduğu sunucu bilgileri
 

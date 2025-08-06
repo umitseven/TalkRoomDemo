@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TalkRoomDemo.businessLayer.Abstract;
 using TalkRoomDemo.DataAccessLayer.Abstract;
+using TalkRoomDemo.DtoLayer.Dtos;
 using TalkRoomDemo.EntityLayer.Concrete;
 
 namespace TalkRoomDemo.businessLayer.Concrete
@@ -16,6 +17,12 @@ namespace TalkRoomDemo.businessLayer.Concrete
         {
             _serverUserDal = serverUserService;
         }
+
+        public async Task<List<ServerUserDto>> GetAllServerUserDtoServerIdAsync(int serverId)
+        {
+            return await _serverUserDal.GetAllServerUserDtoServerIdAsync(serverId);
+        }
+
         public void TDelete(ServerUser entity)
         {
             _serverUserDal.Delete(entity);
