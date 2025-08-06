@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TalkRoomDemo.DtoLayer.Dtos.arkadaşListesi
+namespace TalkRoomDemo.DtoLayer.Dtos
 {
     public class AppUserFriendListDto
     {
@@ -14,5 +14,8 @@ namespace TalkRoomDemo.DtoLayer.Dtos.arkadaşListesi
         public string FriendProfilePictureUrl { get; set; } // listedeki arkadaşın profil fotoğrafı URL'si
         public bool HasUnreadMessages { get; set; } // listedeki arkadaşın okunmamış mesajları olup olmadığı durumu
         public DateTime? LastMessageTime { get; set; } // listedeki arkadaşla yapılan son mesajın zamanı
+        public string CurrentUserName { get; set; } // şu anki kullanıcının kullanıcı adı
     }
 }
+
+// yukarıdaki 3 sınıfı kullanmıyoruz message sınıfına taşınacak

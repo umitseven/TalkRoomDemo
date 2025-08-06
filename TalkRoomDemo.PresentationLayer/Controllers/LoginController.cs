@@ -28,6 +28,7 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
         public async Task <IActionResult> Index(LoginViewModel loginViewModel)
         {
             var result = await _signInManager.PasswordSignInAsync(loginViewModel.UserName, loginViewModel.Password, false, true);
+
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(loginViewModel.UserName);
@@ -36,6 +37,9 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim("UserName", user.UserName ?? user.Name),
+                    new Claim("FriendCodes", user.FriendCode),
+                    new Claim("ImageUrl", user.ImageUrl ?? "/Login/image/pp.jpg"),
+                    new Claim("Bio", user.Bio ?? "TalkRoom"),
                 };
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync("Identity.Application", new ClaimsPrincipal(claimsIdentity));

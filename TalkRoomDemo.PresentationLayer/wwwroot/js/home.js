@@ -53,6 +53,7 @@ const openModalBtn = document.getElementById('openModalBtn');
 const roomModal = document.getElementById('roomModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const createRoomForm = document.getElementById('createRoomForm');
+const roomNameInput1 = document.getElementById('roomName');
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -64,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     openModalBtn2.addEventListener('click', () => {
         // Backend'den gelen kodu inputa ata
-        roomNameInput.value = window.serverInviteCode || "#11111"; // fallback kod
+        roomNameInput.value = window.serverInviteCode || "tekrar giriş yapınız."; // fallback kod
         roomModal2.style.display = 'flex';
         roomNameInput.focus(); // input'a odaklan
     });
@@ -83,12 +84,12 @@ document.addEventListener("DOMContentLoaded", function () {
         e.preventDefault();
         try {
             await navigator.clipboard.writeText(roomNameInput.value);
-            alert("Kopyalandı: " + roomNameInput.value);
+            showCopyNotification();
         } catch (err) {
             roomNameInput.select();
             roomNameInput.setSelectionRange(0, 99999);
             document.execCommand("copy");
-            ashowCopyNotification();
+            showCopyNotification();
         }
         roomModal2.style.display = 'none';
     });
@@ -96,15 +97,30 @@ document.addEventListener("DOMContentLoaded", function () {
 function showCopyNotification() {
     const notification = document.getElementById('copyNotification');
     notification.style.opacity = '1';
-    notification.style.bottom = '40px'; // yukarı doğru hareket
+    notification.style.bottom = '40px'; // yukarı doğru hafif hareket
     notification.style.pointerEvents = 'auto';
 
     setTimeout(() => {
         notification.style.opacity = '0';
-        notification.style.bottom = '20px';
+        notification.style.bottom = '20px'; // eski haline dönüyor
         notification.style.pointerEvents = 'none';
-    }, 2000); // 5 saniye sonra gizle
+    }, 2500); // 5 saniye sonra kayboluyor
 }
+
+function showCopyNotification2() {
+    const notification = document.getElementById('copyNotification2');
+    notification.style.opacity = '1';
+    notification.style.bottom = '40px'; // yukarı doğru hafif hareket
+    notification.style.pointerEvents = 'auto';
+
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.bottom = '20px'; // eski haline dönüyor
+        notification.style.pointerEvents = 'none';
+    }, 2500); // 5 saniye sonra kayboluyor
+}
+
+
 
 openModalBtn.addEventListener('click', () => {
     roomModal.style.display = 'flex';
@@ -120,16 +136,21 @@ window.addEventListener('click', (e) => {
     }
    
 });
-
-
-createRoomForm.addEventListener('submit', (e) => {
+createRoomForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const roomName = document.getElementById('roomName').value.trim();
-    if (roomName) {
-        // Buraya odanın oluşturulma kodunu ekleyebilirsin.
-        roomModal.style.display = 'none';
-        createRoomForm.reset();
+    try {
+        await navigator.clipboard.writeText(roomNameInput1.value);
+        showCopyNotification2();
     }
+    catch (err) {
+        roomNameInput1.select();
+        roomNameInput1.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+        showCopyNotification2();
+    }
+    roomModal.style.display = 'none';
 });
+
+
 
 

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 const currentUser = window.currentUser || "Bilinmiyor";
-const currentUserProfileUrl = "/Login/image/pp.jpg";
+const currentUserProfileUrl = window.currentUserProfileUrl || "/Login/image/pp.jpg";
 
 const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
@@ -15,13 +15,13 @@ document.addEventListener("DOMContentLoaded", () => {
         messagesList.scrollTop = messagesList.scrollHeight;
     }
 
-    function appendMessage(user, message) {
+    function appendMessage(user, profileUrl, message) {
         const li = document.createElement("li");
         li.classList.add(user === currentUser ? "mine" : "other");
 
         const img = document.createElement("img");
         img.classList.add("message-profile-pic");
-        img.src = currentUserProfileUrl;
+        img.src = profileUrl;
 
         const contentDiv = document.createElement("div");
         contentDiv.classList.add("message-content");
@@ -43,9 +43,14 @@ document.addEventListener("DOMContentLoaded", () => {
         scrollToBottom();
     }
 
-    connection.on("ReceiveMessage", (user, message) => {
-        appendMessage(user, message);
+    connection.on("ReceiveMessage", (user, profileUrl, message) => {
+        appendMessage(user, profileUrl, message);
     });
+
+    connection.on("ReceiveFriendListUpdate", function () {
+        $("#friendListContainer").load("/Friend/GetFriendPartial");
+    });
+    connection.start().catch(err => console.error(err));
 
     connection.start().then(() => {
         sendButton.disabled = false;
@@ -57,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const message = messageInput.value.trim();
         if (message === "") return;
 
-        connection.invoke("SendMessage", currentUser, message).catch(err => {
+        connection.invoke("SendMessage", currentUser, currentUserProfileUrl, message).catch(err => {
             console.error("Mesaj gönderme hatası:", err.toString());
         });
 

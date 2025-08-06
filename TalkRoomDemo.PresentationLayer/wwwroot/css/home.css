@@ -100,6 +100,23 @@ body, html {
     overflow: hidden;
 }
 
+.form-control1::-webkit-scrollbar {
+    width: 8px;
+}
+
+.form-control1::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.form-control1::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+}
+
+    .form-control1::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    } 
+
 .message-username {
     font-weight: bold;
     font-size: 0.9rem;
@@ -919,3 +936,4 @@ body, html {
         font-size: 16px;
     }
 }
+

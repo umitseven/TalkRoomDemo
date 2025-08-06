@@ -22,10 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="IFriendService\" />
-    <Folder Include="ServiceImplementasyonları\" />
-    <Folder Include="IMassageService\" />
-    <Folder Include="IUserService\" />
+    <ProjectReference Include="..\TalkRoomDemo.DataAccessLayer\TalkRoomDemo.DataAccessLayer.csproj" />
   </ItemGroup>
 
 </Project>

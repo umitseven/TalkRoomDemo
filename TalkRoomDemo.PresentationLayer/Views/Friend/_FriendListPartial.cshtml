@@ -1,0 +1,17 @@
+﻿@using TalkRoomDemo.DtoLayer.Dtos
+@model List<AppUserFriendListDto>
+
+    @foreach (var friend in Model)
+{
+    <div class="channel">
+        <div class="user-info">
+            <img src="@friend.FriendProfilePictureUrl" alt="Profil" class="profile-pic">
+            <div class="user-details">
+                <a class="username" href="/Chat/PrivateChat/@friend.FriendUserName">
+                    @friend.FriendUserName
+                </a>
+                <div class="status @(friend.IsOnline ? "online" : "offline")"></div>
+            </div>
+        </div>
+    </div>
+}

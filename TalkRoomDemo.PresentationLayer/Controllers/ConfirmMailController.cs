@@ -29,7 +29,7 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
             {
                 user.EmailConfirmed = true;
                 await _userManager.UpdateAsync(user);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Login");
             }
             return View();
         }

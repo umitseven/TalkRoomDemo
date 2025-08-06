@@ -1,0 +1,110 @@
+﻿    @model SettingsViewModel
+    @{
+        Layout = null;
+    }
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>TalkRoom-Ayarlar</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="~/css/setting.css" />
+    </head>
+    <body>
+        <button type="button" onclick=" window.location.href='@Url.Action("Index", "Home")'" class="close-btn">✖ Kapat</button>
+        <form asp-action="Settings" method="post">
+            <div class="settings-container">
+                <div class="profile-header">
+                    <img id="profilePreview" src="@Model.ImageUrl" alt="Profil Fotoğrafı" class="profile-pic" />
+                </div>
+
+                <div class="form-group">
+                    <label for="profileImageUrl">Profil Fotoğrafı URL</label>
+                    <input asp-for="ImageUrl" id="profileImageUrl" class="form-control" placeholder="https://..." />
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Kullanıcı Adı</label>
+                    <input asp-for="UserName" id="username" class="form-control" placeholder="kullanıcı adınız" />
+                    <label style="font-weight:400 ">NOT: Giriş yaparken kullanılacak.</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Hakkında</label>
+                <textarea asp-for="Bio" id="bio" rows="3" style="resize: none;" class="form-control1" placeholder="Kendiniz hakkında kısa bir açıklama..."></textarea>
+                </div>
+
+                <button type="submit" id="saveBtn">Kaydet</button>
+            </div>
+        </form>
+        @if (TempData["Success"] != null)
+        {
+            <div id="copyNotification3" style="
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background-color: #4BB543;
+                color: white;
+                padding: 10px 20px;
+                border-radius: 5px;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.5s, bottom 0.5s;
+                font-weight: 600;
+                z-index: 1000;
+            ">
+                Profil Başarı Bir Şekilde Değiştirildi!
+            </div>
+        }
+    </body>
+
+    <script>
+        const profileInput = document.getElementById("profileImageUrl");
+        const profilePreview = document.getElementById("profilePreview");
+
+        const validImageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+        function isValidImageUrl(url) {
+            try {
+                const parsedUrl = new URL(url);
+                const extension = parsedUrl.pathname.split('.').pop().toLowerCase();
+                const isHttp = parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:";
+                const isImage = validImageExtensions.includes(extension);
+                return isHttp && isImage;
+            } catch {
+                return false;
+            }
+        }
+
+        profileInput.addEventListener("input", () => {
+            const url = profileInput.value;
+            if (isValidImageUrl(url)) {
+                profilePreview.src = url;
+            } else {
+                profilePreview.src = "https://via.placeholder.com/120";
+            }
+        });
+
+      window.onload = function () {
+        if (typeof showCopyNotification3 === "function") {
+            showCopyNotification3();
+        }
+    };
+        function showCopyNotification3() {
+        const notification = document.getElementById('copyNotification3');
+        notification.style.opacity = '1';
+        notification.style.bottom = '40px'; // yukarı doğru hafif hareket
+        notification.style.pointerEvents = 'auto';
+
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.bottom = '20px'; // eski haline dönüyor
+            notification.style.pointerEvents = 'none';
+        }, 2500); // 5 saniye sonra kayboluyor
+    }
+    </script>
+
+    </html>
+
+

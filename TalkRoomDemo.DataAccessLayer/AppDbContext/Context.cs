@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 using TalkRoomDemo.EntityLayer.Concrete;
 
 namespace TalkRoomDemo.DataAccessLayer.AppDbContext
@@ -71,13 +72,32 @@ namespace TalkRoomDemo.DataAccessLayer.AppDbContext
                 .HasForeignKey(sm => sm.SenderUserId)
                 .OnDelete(DeleteBehavior.Restrict); // Cascade yerine Restrict
 
-        }
+            // === Arkadaşlık ilişkileri (Friendship) ===
+
+
+            builder.Entity<Friends>()
+                .HasKey(f => f.Id);
+
+            builder.Entity<Friends>()
+                .HasOne(f => f.User)
+                .WithMany()
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Friends>()
+                .HasOne(f => f.Friend)
+                .WithMany()
+                .HasForeignKey(f => f.FriendId)
+                .OnDelete(DeleteBehavior.Restrict);
         
+        }
+
         public DbSet<Message> Messages { get; set; } // Kişisel mesajlar (birebir kullanıcı mesajlaşması)
         public DbSet<Server> Servers { get; set; }   // Sunucular (Discord'daki sunucular gibi)
         public DbSet<ServerMessage> ServerMessages { get; set; } // Sunucu içi mesajlar (kanal içi sohbetler)
         public DbSet<ServerUser> ServerUsers { get; set; } // Sunuculara üye kullanıcılar (hangi kullanıcı hangi sunucuda)
         public DbSet<FriendRequest> FriendRequests { get; set; } // Arkadaşlık istekleri (kullanıcılar arası arkadaşlık talepleri)
+        public DbSet<Friends> Friend { get; set; } // Arkadaşlık ilişkileri (kullanıcılar arası arkadaşlık ilişkileri)
 
     }
 }

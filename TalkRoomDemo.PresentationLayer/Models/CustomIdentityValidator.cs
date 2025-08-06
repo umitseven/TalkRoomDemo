@@ -45,6 +45,22 @@ namespace TalkRoomDemo.PresentationLayer.Models
                 Description = $"Lütfen en az 1 tane sembol giriniz."
             };
         }
+        public override IdentityError DuplicateEmail(string email)
+        {
+            return new IdentityError()
+            {
+                Code = "DuplicateEmail",
+                Description = $"'{email}' bu e-posta adresi daha önce kullanılmış."
+            };
+        }
+        public override IdentityError DuplicateUserName(string userName)
+        {
+            return new IdentityError()
+            {
+                Code = "DuplicateUserName",
+                Description = $"'{userName}' bu kullanıcı adı daha önce kullanılmış"
+            };
+        }
        
     }
 }

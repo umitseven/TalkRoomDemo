@@ -14,6 +14,7 @@ namespace TalkRoomDemo.EntityLayer.Concrete
         // Sunucuyu oluşturan kullanıcı
         public int CreatorUserId { get; set; } // Oluşturan kullanıcının ID'si
         public AppUser CreatorUser { get; set; } // Oluşturan kullanıcının bilgileri
+        public string ServerImageUrl { get; set; } // Sunucuya ait resim URL'si
 
         // Sunucuya ait mesajlar
         public ICollection<ServerMessage> Messages { get; set; } = new List<ServerMessage>(); // Sunucu mesajları

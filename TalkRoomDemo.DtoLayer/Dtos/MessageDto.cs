@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TalkRoomDemo.DtoLayer.Dtos.CreateMessageDto
+namespace TalkRoomDemo.DtoLayer.Dtos
 {
     public class MessageDto
     {
+        public int Id { get; set; } // Mesajın benzersiz kimliği
         public string SenderUserName { get; set; } // Gönderen kullanıcının adı
         public string ReceiverUserName { get; set; } // Alıcı kullanıcının adı
         public string Content { get; set; } // Mesaj içeriği

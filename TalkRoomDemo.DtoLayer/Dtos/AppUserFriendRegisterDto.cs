@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TalkRoomDemo.DtoLayer.Dtos.FriendRequestDto
+namespace TalkRoomDemo.DtoLayer.Dtos
 {
     public class AppUserFriendRegisterDto
     {
@@ -13,5 +13,6 @@ namespace TalkRoomDemo.DtoLayer.Dtos.FriendRequestDto
         public int ReceiverUserId { get; set; } // alıcı kullanıcı ID'si
         public string ReceiverUserName { get; set; } // alıcı kullanıcı adı
         public DateTime RequestSentAt { get; set; } // isteğin gönderildiği tarih ve saat
+        public bool IsAccepted { get; set; } // isteğin kabul edilip edilmediği durumu
     }
 }

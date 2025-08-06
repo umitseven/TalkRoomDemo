@@ -22,13 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="EfCoreConfiguration\" />
-    <Folder Include="IdentitySetup\" />
-    <Folder Include="Repository\" />
-    <Folder Include="Repositories\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TalkRoomDemo.EntityLayer\TalkRoomDemo.EntityLayer.csproj" />
   </ItemGroup>
 

@@ -17,5 +17,6 @@
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script>
         window.currentUser = window.currentUser = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.FindFirst("UserName")?.Value));
+    window.currentUserProfileUrl = window.currentUserProfileUrl = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.FindFirst("ImageUrl")?.Value));
     </script>
 <script src="~/js/chat.js"></script>

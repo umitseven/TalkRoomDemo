@@ -1,4 +1,9 @@
+using Microsoft.AspNetCore.Identity;
+using TalkRoomDemo.businessLayer.Abstract;
+using TalkRoomDemo.businessLayer.Concrete;
+using TalkRoomDemo.DataAccessLayer.Abstract;
 using TalkRoomDemo.DataAccessLayer.AppDbContext;
+using TalkRoomDemo.DataAccessLayer.EntityFramwork;
 using TalkRoomDemo.EntityLayer.Concrete;
 using TalkRoomDemo.PresentationLayer.Hubs;
 using TalkRoomDemo.PresentationLayer.Models;
@@ -9,6 +14,13 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 builder.Services.AddDbContext<Context>();
 builder.Services.AddIdentity<AppUser,AppRole>().AddEntityFrameworkStores<Context>().AddErrorDescriber<CustomIdentityValidator>();
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.User.RequireUniqueEmail = true; // Email benzersiz olmalý!
+});
+builder.Services.AddScoped<IFriendService, FriendsManager>();
+builder.Services.AddScoped<IFriendsDal, EfFriendsDal>();
+
 
 
 var app = builder.Build();

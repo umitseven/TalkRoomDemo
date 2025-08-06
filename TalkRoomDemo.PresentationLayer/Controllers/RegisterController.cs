@@ -1,10 +1,10 @@
-﻿using TalkRoomDemo.DtoLayer.Dtos.RegisterDto;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MailKit.Net.Smtp;
 using MimeKit;
 using System.Net.Mail;
 using TalkRoomDemo.EntityLayer.Concrete;
+using TalkRoomDemo.DtoLayer.Dtos;
 
 
 namespace TalkRoomDemo.PresentationLayer.Controllers
@@ -31,14 +31,20 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                 int Code;
                 Code = rnd.Next(100000, 1000000);
 
+                Random rnd2 = new Random();
+                string FriendCodes;
+                FriendCodes = $"#{appUserRegisterDto.Name}" + rnd2.Next(100000, 1000000).ToString();
+
                 AppUser appUser = new AppUser()
                 {
                     UserName = appUserRegisterDto.UserName,
                     Surname = appUserRegisterDto.Surname,
                     Name = appUserRegisterDto.Name,
                     Email = appUserRegisterDto.Email,
-                    ImageUrl ="www.google.com",
-                    ConfirmCode =Code
+                    ImageUrl = "/Login/image/pp.jpg",
+                    Bio = "TalkRoom",
+                    ConfirmCode = Code,
+                    FriendCode = FriendCodes
                 };
                 var result = await _userManager.CreateAsync(appUser, appUserRegisterDto.Password);
                 if (result.Succeeded)
@@ -72,6 +78,7 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                     {
                         ModelState.AddModelError("", item.Description);
                     }
+                    
                 }
             }
             return View();
