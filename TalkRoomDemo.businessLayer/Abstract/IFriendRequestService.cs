@@ -11,5 +11,6 @@ namespace TalkRoomDemo.businessLayer.Abstract
     public interface IFriendRequestService : IGenericService<FriendRequest>
     {
         Task<List<AppUserFriendRegisterDto>> TGetAllFriendRegister(int userId);
+        Task TInsertAsync(FriendRequest entity);
     }
 }

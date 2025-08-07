@@ -41,6 +41,10 @@ namespace TalkRoomDemo.businessLayer.Concrete
         {
             _friendRequestDal.Insert(entity);
         }
+        public async Task TInsertAsync(FriendRequest entity)
+        {
+            await _friendRequestDal.InsertAsync(entity); 
+        }
 
         public void TUpdate(FriendRequest entity)
         {

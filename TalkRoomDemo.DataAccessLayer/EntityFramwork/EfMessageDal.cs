@@ -14,11 +14,15 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
 {
     public class EfMessageDal : GenericRepository<Message>, IMessageDal
     {
+        private readonly Context _context;
+        public EfMessageDal(Context context) : base(context)
+        {
+            _context = context;
+        }
         public async Task <List<MessageDto>> GetAllMessagesByUserIdAsync(int userId)
         {
 
-            var context = new Context();
-            var values = await context.Messages.Where(m => m.SenderUserId == userId || m.ReceiverUserId == userId).Select(m => new MessageDto
+            var values = await _context.Messages.Where(m => m.SenderUserId == userId || m.ReceiverUserId == userId).Select(m => new MessageDto
             {
                Id = m.Id,
                SenderUserName = m.SenderUser.UserName,

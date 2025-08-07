@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using TalkRoomDemo.businessLayer.Abstract;
 using TalkRoomDemo.PresentationLayer.Hubs;
@@ -18,14 +19,18 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
         }
         public async Task <IActionResult> GetFriendPartial()
         {
-            int userId =int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var friendList = await _friendService.TGetFriendsByUserId(userId);
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userIdStr)) return Unauthorized();
+            int userId = int.Parse(userIdStr);
+            var friend = await _friendService.TGetFriendsByUserId(userId);
 
-            return PartialView("_FriendListPartial", friendList);
+            return PartialView("_FriendListPartial", friend);
         }
         public async Task<IActionResult> Notify()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId)) return Unauthorized();
+
             await _hubContext.Clients.User(userId).SendAsync("ReceiveFriendListUpdate");
             return Ok();
         }

@@ -62,6 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeModalBtn2 = document.getElementById('closeModalBtn2');
     const createRoomForm2 = document.getElementById('createRoomForm2');
     const roomNameInput = document.getElementById('roomName2');
+    const roomNameInput2 = document.getElementById('roomName3');
 
     openModalBtn2.addEventListener('click', () => {
         // Backend'den gelen kodu inputa ata
@@ -150,7 +151,3 @@ createRoomForm.addEventListener('submit', async (e) => {
     }
     roomModal.style.display = 'none';
 });
-
-
-
-

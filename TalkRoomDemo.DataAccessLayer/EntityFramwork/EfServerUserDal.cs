@@ -14,10 +14,14 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
 {
     public class EfServerUserDal : GenericRepository<ServerUser>, IServerUserDal
     {
+        private readonly Context _context;
+        public EfServerUserDal(Context context) : base(context)
+        {
+            _context = context;
+        }
         public async Task<List<ServerUserDto>> GetAllServerUserDtoServerIdAsync(int serverId)
         {
-            var context = new Context();
-            var values = await context.ServerUsers
+            var values = await _context.ServerUsers
                 .Where(su => su.UserId == serverId)
                 .Include(su => su.AppUser)
                 .Select(su => new ServerUserDto

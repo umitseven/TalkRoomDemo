@@ -13,5 +13,6 @@ namespace TalkRoomDemo.DataAccessLayer.Abstract
         void Delete(T entity);
         List<T> GetAll();
         T GetById(int id);
+        Task InsertAsync(T entity);
     }
 }

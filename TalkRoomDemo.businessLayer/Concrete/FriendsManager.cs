@@ -19,6 +19,23 @@ namespace TalkRoomDemo.businessLayer.Concrete
             _friendDal = friendsDal;
         }
 
+        public async Task CreateFriendshipAsync(int senderUserId, int receiverUserId)
+        {
+            var friendship = new Friends
+            {
+                UserId = senderUserId,
+                FriendId = receiverUserId
+            };
+
+            var reverseFriendship = new Friends
+            {
+                UserId = receiverUserId,
+                FriendId = senderUserId
+            };
+            await _friendDal.InsertAsync(friendship);
+            await _friendDal.InsertAsync(reverseFriendship);
+        }
+
         public void TDelete(Friends entity)
         {
             _friendDal.Delete(entity);

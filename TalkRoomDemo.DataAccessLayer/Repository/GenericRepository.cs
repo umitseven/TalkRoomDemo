@@ -11,18 +11,19 @@ namespace TalkRoomDemo.DataAccessLayer.Repository
 {
     public class GenericRepository<T> : IGenericDal<T> where T : class
     {
-        Context context = new Context();
+        private readonly Context _context;
         private readonly DbSet<T> _object;
 
-        public GenericRepository()
+        public GenericRepository(Context context)
         {
-            _object = context.Set<T>();
+            _context = context;
+            _object = _context.Set<T>();
         }
         public void Delete(T entity)
         {
-            var deleteEntity = context.Entry(entity);
+            var deleteEntity = _context.Entry(entity);
             deleteEntity.State = EntityState.Deleted;
-            context.SaveChanges();
+            _context.SaveChanges();
         }
 
         public List<T> GetAll()
@@ -37,16 +38,24 @@ namespace TalkRoomDemo.DataAccessLayer.Repository
 
         public void Insert(T entity)
         {
-            var addEntity = context.Entry(entity);
+            var addEntity = _context.Entry(entity);
             addEntity.State = EntityState.Added;
-            context.SaveChanges();
+            _context.SaveChanges();
         }
          
         public void Update(T entity)
         {
-            var updateEntity = context.Entry(entity);
+            var updateEntity = _context.Entry(entity);
             updateEntity.State = EntityState.Modified;
-            context.SaveChanges();
+            _context.SaveChanges();
+        }
+
+        public async Task InsertAsync(T entity)
+        {
+            var addEntity = _context.Entry(entity);
+            addEntity.State = EntityState.Added;
+            await _context.SaveChangesAsync();
+
         }
     }
 }

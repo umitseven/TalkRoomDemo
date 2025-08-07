@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Build.Framework.Profiler;
+using System.Security.Claims;
 
 namespace TalkRoomDemo.PresentationLayer.Hubs
 {
@@ -10,10 +11,14 @@ namespace TalkRoomDemo.PresentationLayer.Hubs
             
             await Clients.All.SendAsync("ReceiveMessage", user, profileUrl, message);
         }
-        public async Task NotifyFriendListUpdate(string userId)
+        public override async Task OnConnectedAsync()
         {
-            await Clients.User(userId).SendAsync("ReceiveFriendListUpdate");
+            var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            Console.WriteLine($"Kullanıcı bağlandı: {userId}");
+            await base.OnConnectedAsync();
         }
+
+
 
     }
 }

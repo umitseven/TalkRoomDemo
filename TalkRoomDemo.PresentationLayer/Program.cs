@@ -20,7 +20,16 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 builder.Services.AddScoped<IFriendService, FriendsManager>();
 builder.Services.AddScoped<IFriendsDal, EfFriendsDal>();
-
+builder.Services.AddScoped<IServerService, ServerManager>();
+builder.Services.AddScoped<IServerDal, EfSereverDal>();
+builder.Services.AddScoped<IMessageService, MessageManager>();
+builder.Services.AddScoped<IMessageDal, EfMessageDal>();
+builder.Services.AddScoped<IFriendRequestService, FriendRequestManager>();
+builder.Services.AddScoped<IFriendRequestDal, EfFriendRequestDal>();
+builder.Services.AddScoped<IServerMessageService, ServerMessageManager>();
+builder.Services.AddScoped<IServerMessageDal, EfServerMessageDal>();
+builder.Services.AddScoped<IServerUserService, ServerUserManager>();
+builder.Services.AddScoped<IServerUserDal, EfServerUserDal>();
 
 
 var app = builder.Build();

@@ -14,11 +14,16 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
 {
     public class EfFriendsDal : GenericRepository<Friends>, IFriendsDal
     {
+        private readonly Context _context;
+        public EfFriendsDal(Context contex) : base(contex)
+        {
+            _context = contex;
+        }
         public async Task <List<AppUserFriendListDto>> GetFriendsByUserId(int userId)
         {
 
-            var context = new Context();
-            var values = await context.Friend.Where(f => f.UserId == userId).Select(f => new AppUserFriendListDto
+            
+            var values = await _context.Friend.Where(f => f.UserId == userId).Select(f => new AppUserFriendListDto
             {
                 FriendId = f.Friend.Id,
                 FriendUserName = f.Friend.UserName,

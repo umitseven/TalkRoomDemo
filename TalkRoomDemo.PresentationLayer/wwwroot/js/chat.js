@@ -48,15 +48,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     connection.on("ReceiveFriendListUpdate", function () {
+        console.log("arkadaş listesi güncellendi")
         $("#friendListContainer").load("/Friend/GetFriendPartial");
     });
-    connection.start().catch(err => console.error(err));
 
-    connection.start().then(() => {
-        sendButton.disabled = false;
-    }).catch(err => {
-        console.error("SignalR bağlantı hatası:", err.toString());
+    connection.start().catch(function (err) {
+        return console.error(err.toString());
     });
+
 
     function sendMessage() {
         const message = messageInput.value.trim();

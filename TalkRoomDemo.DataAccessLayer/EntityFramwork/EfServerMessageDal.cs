@@ -15,11 +15,15 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
 {
     public class EfServerMessageDal : GenericRepository<ServerMessage>, IServerMessageDal
     {
+        private readonly Context _context;
+        public EfServerMessageDal(Context context) : base(context)
+        {
+            _context = context;
+        }
         public async Task<List<ServerMessageDto>> GetAllServerMessagesByServerIdAsync(int serverId, int page = 1, int pageSize = 20)
         {
             var skip = (page - 1) * pageSize;
-            var context = new Context();
-            var value = await context.ServerMessages
+            var value = await _context.ServerMessages
                 .Where(sm => sm.ServerId == serverId).OrderByDescending(sm => sm.SendAt)
                 .Skip(skip).Take(pageSize).Select(sm => new ServerMessageDto
                 {

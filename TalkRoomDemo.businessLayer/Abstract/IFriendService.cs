@@ -12,5 +12,6 @@ namespace TalkRoomDemo.businessLayer.Abstract
     public interface IFriendService : IGenericService<Friends>
     {
         Task <List<AppUserFriendListDto>> TGetFriendsByUserId(int id);
+        Task CreateFriendshipAsync(int senderUserId, int receiverUserId);
     }
 }
