@@ -8,12 +8,18 @@ using TalkRoomDemo.EntityLayer.Concrete;
 using TalkRoomDemo.PresentationLayer.Hubs;
 using TalkRoomDemo.PresentationLayer.Models;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSignalR();
 builder.Services.AddDbContext<Context>();
+   
 builder.Services.AddIdentity<AppUser,AppRole>().AddEntityFrameworkStores<Context>().AddErrorDescriber<CustomIdentityValidator>();
+
+
 builder.Services.Configure<IdentityOptions>(options =>
 {
     options.User.RequireUniqueEmail = true; // Email benzersiz olmalý!
@@ -30,6 +36,7 @@ builder.Services.AddScoped<IServerMessageService, ServerMessageManager>();
 builder.Services.AddScoped<IServerMessageDal, EfServerMessageDal>();
 builder.Services.AddScoped<IServerUserService, ServerUserManager>();
 builder.Services.AddScoped<IServerUserDal, EfServerUserDal>();
+builder.Services.AddSingleton<OnlineUserCache>(); // Online kullanýcýlarý takip etmek için singleton bir servis ekliyoruz
 
 
 var app = builder.Build();

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TalkRoomDemo.businessLayer.Abstract;
 using TalkRoomDemo.DataAccessLayer.Abstract;
+using TalkRoomDemo.DataAccessLayer.EntityFramwork;
 using TalkRoomDemo.DtoLayer.Dtos;
 using TalkRoomDemo.EntityLayer.Concrete;
 
@@ -50,5 +51,6 @@ namespace TalkRoomDemo.businessLayer.Concrete
         {
             _friendRequestDal.Update(entity);
         }
+       
     }
 }

@@ -46,6 +46,7 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
             if (targetUser.Id == currentUserId)
                 return BadRequest("Kendine arkadaşlık isteği gönderemezsin");
 
+
             var friendRequest = new FriendRequest
             {
                 SenderUserId = currentUserId,
@@ -53,12 +54,15 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                 SendAt = DateTime.Now,
                 IsAccepted = true
             };
-
+           
             await _friendRequestService.TInsertAsync(friendRequest);
             await _friendService.CreateFriendshipAsync(currentUserId, targetUser.Id);
             await _hubContext.Clients.User(currentUserId.ToString()).SendAsync("ReceiveFriendListUpdate");
             await _hubContext.Clients.User(targetUser.Id.ToString()).SendAsync("ReceiveFriendListUpdate");
+           
             return RedirectToAction("Index", "Home");
         }
+
+       
     }
 }

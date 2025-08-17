@@ -29,5 +29,26 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
                 }).ToListAsync();
             return values;
         }
+        public async Task<AppUserFriendRegisterDto> GetFriendRequestAsync(int senderId, int receiverId)
+        {
+            var fr = await _context.FriendRequests
+         .Include(fr => fr.SenderUser)
+         .Include(fr => fr.ReceiverUser)
+         .FirstOrDefaultAsync(fr => fr.SenderUserId == senderId && fr.ReceiverUserId == receiverId);
+
+            if (fr == null) return null;
+
+            return new AppUserFriendRegisterDto
+            {
+                SenderUserId = fr.SenderUserId,
+                SenderUserName = fr.SenderUser.UserName,
+                ReceiverUserId = fr.ReceiverUserId,
+                ReceiverUserName = fr.ReceiverUser.UserName,
+                RequestSentAt = fr.SendAt,
+                IsAccepted = fr.IsAccepted
+            };
+
+        }
+       
     }
 }

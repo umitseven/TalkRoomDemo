@@ -10,6 +10,6 @@ namespace TalkRoomDemo.DataAccessLayer.Abstract
 {
     public interface IServerUserDal : IGenericDal<ServerUser>
     {
-        Task<List<ServerUserDto>> GetAllServerUserDtoServerIdAsync(int serverId);
+        Task<List<ServerUserDto>> GetServerUsersAsync(int serverId);
     }
 }

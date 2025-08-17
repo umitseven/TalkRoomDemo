@@ -21,15 +21,13 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
         }
         public async Task <List<AppUserFriendListDto>> GetFriendsByUserId(int userId)
         {
-
-            
             var values = await _context.Friend.Where(f => f.UserId == userId).Select(f => new AppUserFriendListDto
             {
                 FriendId = f.Friend.Id,
                 FriendUserName = f.Friend.UserName,
                 FriendProfilePictureUrl = f.Friend.ImageUrl,
-                CurrentUserName = f.User.UserName
-
+                CurrentUserName = f.User.UserName,
+              
             })
                 .ToListAsync();
             return values;

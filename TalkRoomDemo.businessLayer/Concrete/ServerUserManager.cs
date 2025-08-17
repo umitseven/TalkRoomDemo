@@ -13,14 +13,34 @@ namespace TalkRoomDemo.businessLayer.Concrete
     public class ServerUserManager : IServerUserService
     {
         private readonly IServerUserDal _serverUserDal;
+       
+        private readonly HashSet<int> _onlineUsers = new HashSet<int>();
         public ServerUserManager(IServerUserDal serverUserService)
         {
             _serverUserDal = serverUserService;
+            
         }
 
-        public async Task<List<ServerUserDto>> GetAllServerUserDtoServerIdAsync(int serverId)
+        public async Task<List<ServerUserDto>> GetServerUsersAsync(int serverId)
         {
-            return await _serverUserDal.GetAllServerUserDtoServerIdAsync(serverId);
+            var users = await _serverUserDal.GetServerUsersAsync(serverId);
+            return users.Select(u => new ServerUserDto
+            {
+                UserId = u.UserId,
+                UserName = u.UserName,
+                AvatarUrl = u.AvatarUrl,
+                IsOnline = _onlineUsers.Contains(u.UserId)
+            }).ToList();
+        }
+
+        public List<int> GetOnlineUsers()
+        {
+            return _onlineUsers.ToList();
+        }
+
+        public bool IsOnline(int userId)
+        {
+            return _onlineUsers.Contains(userId);
         }
 
         public void TDelete(ServerUser entity)
@@ -47,5 +67,15 @@ namespace TalkRoomDemo.businessLayer.Concrete
         {
             _serverUserDal.Update(entity);
         }
+        public void UserConnected(int userId)
+        {
+            _onlineUsers.Add(userId);
+        }
+
+        public void UserDisconnected(int userId)
+        {
+            _onlineUsers.Remove(userId);    
+        }
+      
     }
 }

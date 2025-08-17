@@ -1,17 +1,18 @@
 ﻿@using TalkRoomDemo.DtoLayer.Dtos
 @model List<AppUserFriendListDto>
 
-    @foreach (var friend in Model)
+@foreach (var friend in Model)
 {
     <div class="channel">
         <div class="user-info">
             <img src="@friend.FriendProfilePictureUrl" alt="Profil" class="profile-pic">
-            <div class="user-details">
-                <a class="username" href="/Chat/PrivateChat/@friend.FriendUserName">
+            <div class="user-details" data-userid="@friend.FriendId">
+                <a class="username" style="font-weight: 600; text-decoration: none; color: white;" href="/#/@friend.FriendUserName">
                     @friend.FriendUserName
                 </a>
-                <div class="status @(friend.IsOnline ? "online" : "offline")"></div>
+                <span class="status @(friend.IsOnline ? "online" : "offline")"></span>
             </div>
         </div>
     </div>
 }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.8/signalr.min.js"></script>

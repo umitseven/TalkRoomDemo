@@ -1,25 +1,70 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Build.Framework.Profiler;
+using StackExchange.Redis;
+using System;
+using System.Collections.Concurrent;
 using System.Security.Claims;
+using TalkRoomDemo.businessLayer.Abstract;
+using TalkRoomDemo.businessLayer.Concrete;
+using TalkRoomDemo.EntityLayer.Concrete;
 
 namespace TalkRoomDemo.PresentationLayer.Hubs
 {
-    public class ChatHub :Hub
+    public class ChatHub : Hub
     {
-        public async Task SendMessage(string user,string profileUrl, string message)
+        private readonly IServerUserService _serverUserService;
+        private readonly IFriendService _friendService;
+        private readonly OnlineUserCache _onlineCache;
+        public static ConcurrentDictionary<string, string> OnlineUsers = new ConcurrentDictionary<string, string>();
+        public ChatHub(IServerUserService serverUserService, OnlineUserCache onlineUserCache,IFriendService friendService)
         {
-            
+            _friendService = friendService;
+            _serverUserService = serverUserService;
+            _onlineCache = onlineUserCache;
+        }
+        public async Task SendMessage(string user, string profileUrl, string message)
+        {
+
             await Clients.All.SendAsync("ReceiveMessage", user, profileUrl, message);
         }
+
+
         public override async Task OnConnectedAsync()
         {
-            var userId = Context.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            Console.WriteLine($"Kullanıcı bağlandı: {userId}");
+            int userId = int.Parse(Context.UserIdentifier);
+            var User = Context.UserIdentifier;
+            _onlineCache.UserConneted(userId);
+
+            var friends = await _friendService.TGetFriendsByUserId(userId);
+
+            if (!string.IsNullOrEmpty(User))
+            {
+                OnlineUsers[User] = Context.ConnectionId;
+                await Clients.All.SendAsync("UserOnline",User);
+            }
+
             await base.OnConnectedAsync();
         }
 
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            int userId = int.Parse(Context.UserIdentifier);
+            var user = Context.UserIdentifier;
+            await Task.Delay(TimeSpan.FromMinutes(3));
 
+            if (!string.IsNullOrEmpty(user))
+            {
+                OnlineUsers.TryRemove(user, out _);
+                await Clients.All.SendAsync("UserOffline", user);
+            }
 
+            await base.OnDisconnectedAsync(exception);
+        }
+
+        public async Task GetOnlineUsers()
+        {
+            await Clients.Caller.SendAsync("ReceiveOnlineUsers", OnlineUsers.Keys);
+        }
     }
 }
     

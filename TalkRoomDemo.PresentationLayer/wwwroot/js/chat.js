@@ -51,9 +51,39 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("arkadaş listesi güncellendi")
         $("#friendListContainer").load("/Friend/GetFriendPartial");
     });
+   
 
-    connection.start().catch(function (err) {
-        return console.error(err.toString());
+    connection.on("UserOnline", function (user) {
+        const element= document.querySelector(`[data-userid='${user}'] .status`);
+        if (element) {
+            element.classList.remove("offline");
+            element.classList.add("online");
+        }
+    });
+    connection.on("UserOffline", function (user) {
+        const element = document.querySelector(`[data-userid='${user}'] .status`);
+        if (element) {
+            element.classList.remove("online");
+            element.classList.add("offline");
+        }
+    });
+
+    connection.on("ReceiveOnlineUsers", function (userIds) {
+        userIds.forEach(user => {
+            const element = document.querySelector(`[data-userid='${user}'] .status`);
+            if (element) {
+                element.classList.remove("offline");
+                element.classList.add("online");
+            }
+        });
+    });
+   
+
+ 
+    connection.start().then(() => {
+        console.log("SignalR connected.");
+
+        connection.invoke("GetOnlineUsers");
     });
 
 

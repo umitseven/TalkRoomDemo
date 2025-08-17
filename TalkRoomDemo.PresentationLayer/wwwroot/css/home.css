@@ -270,8 +270,14 @@ body, html {
 }
 
     .status.online {
-        background-color: #3ba55d;
+        background-color: #3ba55d; /* Yeþil */
     }
+
+    .status.offline {
+        background-color: #747f8d; /* Gri */
+    }
+
+
 
 .user-actions {
     display: flex;

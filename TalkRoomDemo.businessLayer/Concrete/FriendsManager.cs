@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TalkRoomDemo.businessLayer.Abstract;
+﻿using TalkRoomDemo.businessLayer.Abstract;
 using TalkRoomDemo.DataAccessLayer.Abstract;
 using TalkRoomDemo.DtoLayer.Dtos;
 using TalkRoomDemo.EntityLayer.Concrete;
@@ -13,10 +8,12 @@ namespace TalkRoomDemo.businessLayer.Concrete
     public class FriendsManager : IFriendService
     {
         private readonly IFriendsDal _friendDal;
+        private readonly OnlineUserCache _onlineUserCache;
 
-        public FriendsManager(IFriendsDal friendsDal)
+        public FriendsManager(IFriendsDal friendsDal, OnlineUserCache onlineUserCache)
         {
             _friendDal = friendsDal;
+            _onlineUserCache = onlineUserCache;
         }
 
         public async Task CreateFriendshipAsync(int senderUserId, int receiverUserId)
@@ -55,7 +52,8 @@ namespace TalkRoomDemo.businessLayer.Concrete
         {
             return await _friendDal.GetFriendsByUserId(userId);
         }
-
+      
+       
         public void TInsert(Friends entity)
         {
             _friendDal.Insert(entity);

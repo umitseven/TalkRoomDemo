@@ -19,7 +19,7 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
         {
             _context = context;
         }
-        public async Task<List<ServerUserDto>> GetAllServerUserDtoServerIdAsync(int serverId)
+        public async Task<List<ServerUserDto>> GetServerUsersAsync(int serverId)
         {
             var values = await _context.ServerUsers
                 .Where(su => su.UserId == serverId)
@@ -33,5 +33,7 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
                 .ToListAsync();
             return values;
         }
+
+      
     }
 }

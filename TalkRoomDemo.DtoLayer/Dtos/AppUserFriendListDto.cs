@@ -8,7 +8,7 @@ namespace TalkRoomDemo.DtoLayer.Dtos
 {
     public class AppUserFriendListDto
     {
-        public int FriendId { get; set; } //listedki arkadaşın Id'si
+        public int FriendId { get; set; } //listedeki arkadaşın Id'si
         public string FriendUserName { get; set; } // listedeki arkadaşın Kullanıcı adı
         public bool IsOnline { get; set; } // listedeki arkadaşın çevrim durumu
         public string FriendProfilePictureUrl { get; set; } // listedeki arkadaşın profil fotoğrafı URL'si
