@@ -14,7 +14,9 @@
                 <img class="server" src="~/Login/image/Logo.svg" />
                 <div class="element"></div>
             </div>
-            <div><img class="server" src="~/login\image\logo.svg" /></div>
+            <div><img id="openModalBtn" class="addRomm" src="~/login\image\AddRoom.svg" title="Oda oluşturma" /></div> @*bu kısım yeni oda eklemelerinde olacak olan kısım*@
+            
+            
             
 
             
@@ -113,7 +115,24 @@
 
         <main class="chat-area">
             <header class="chat-header">
-                <button id="openModalBtn" class="add-room-btn">＋</button>
+                @* <button id="openModalBtn" class="add-room-btn">＋ oda oluşturma ikonu resmi vs.</button> *@
+                <div class="notification">
+                    <img id="alertIcon" src="~/login/image/exclamation.svg"
+                         style="width:20px; height:20px; position:fixed; margin-left:20px;"
+                         class="add-room-btn alert-icon" />
+
+                    <img id="bellIcon" style="width: 25px;height: 25px; cursor:pointer;" class="add-room-btn" src="~/login/image/bell.svg" />
+                    
+                        <div id="notificationPanel" class="notification-panel hidden">
+
+                            <h4>Bildirimler</h4>
+                            <div id="notificationBox">
+
+                            @await Html.PartialAsync("~/Views/FriendRequest/approvedInvite.cshtml")
+                            </div>
+                        </div>
+                   
+                </div> @*bu kısım bildirim kutusunun olduğu yer*@
                 
             </header>
 

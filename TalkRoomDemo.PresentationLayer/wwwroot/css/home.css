@@ -658,6 +658,15 @@ body, html {
     justify-content: center;
     cursor: pointer;
 }
+.addRomm {
+    width: 50px;
+    height: 50px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
 
 /* === KANAL LÝSTESÝ & KULLANICI PANELÝ === */
 .channels-bar {
@@ -749,6 +758,87 @@ body, html {
     .icon-btn:hover {
         color: white;
     }
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-3px);
+    }
+
+    50% {
+        transform: translateX(3px);
+    }
+
+    75% {
+        transform: translateX(-3px);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.notification .alert-icon {
+    display: none; /* default olarak gizli */
+}
+
+    .notification .alert-icon.active {
+        display: inline-block;
+        animation: shake 0.5s ease-in-out infinite; /* sonsuz sallanma */
+    }
+
+
+.notification {
+    position: relative;
+    display: inline-block;
+}
+
+.notification-panel {
+    position: absolute;
+    top: 35px; /* ikonun hemen altý */
+    right: 0;
+    width: 250px;
+    background: #2f3136;
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+    padding: 10px;
+    z-index: 1000;
+    
+}
+
+    .notification-panel h4 {
+        margin: 0 0 10px 0;
+        font-size: 14px;
+        border-bottom: 1px solid #444;
+        padding-bottom: 5px;
+    }
+
+    .notification-panel ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .notification-panel li {
+        padding: 5px 0;
+        border-bottom: 1px solid #444;
+        font-size: 13px;
+    }
+
+        .notification-panel li:last-child {
+            border-bottom: none;
+        }
+
+    .notification-panel.hidden {
+        display: none;
+    }
+
 
 .modal {
   display: none; /* gizli baþlangýçta */

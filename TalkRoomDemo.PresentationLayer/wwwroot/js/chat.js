@@ -77,7 +77,25 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
-   
+    connection.on("ReceiveFriendRequest", function (senderName, requestId) {
+        const html = `
+        <form data-request-id="${requestId}" action="/FriendRequest/approvedInvite" method="post">
+            <input type="hidden" name="requestId" value="${requestId}" />
+            <span>${senderName} sana arkadaşlık isteği gönderdi.</span>
+            <button type="submit">Kabul</button>
+            <button type="submit" formaction="/FriendRequest/RejectInvite">Reddet</button>
+        </form>
+    `;
+        $("#notificationBox").append(html);
+    });
+    connection.on("FriendRequestResponse", function (userId, IsAccepted) {
+        if (IsAccepted === 1) {
+            alert("Arkadaşlık kabul edildi!");
+            // burada arkadaş listeni AJAX ile yeniden çekebilirsin
+        } else if (IsAccepted === 2) {
+            alert("Arkadaşlık isteğin reddedildi.");
+        }
+    });
 
  
     connection.start().then(() => {
@@ -85,6 +103,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
         connection.invoke("GetOnlineUsers");
     });
+
+    function acceptRequest(requestId) {
+        $.post("/FriendRequest/approvedInvite", { requestId: requestId })
+            .done(function (data) {
+                $(`form[data-request-id='${requestId}']`).remove();
+                $("#friendListContainer").load("/Friend/GetFriendPartial");
+                // Karşı tarafa kabul bilgisini gönder
+                connection.invoke("RespondFriendRequest", requestId, 1);
+            })
+            .fail(function (err) {
+                alert("Hata: " + err.responseText);
+            });
+    }
+
+    function rejectRequest(requestId) {
+        $.post("/FriendRequest/RejectInvite", { requestId: requestId })
+            .done(function (data) {
+                $(`form[data-request-id='${requestId}']`).remove();
+                connection.invoke("RespondFriendRequest", requestId, 2);
+            })
+            .fail(function (err) {
+                alert("Hata: " + err.responseText);
+            });
+    }
+
 
 
     function sendMessage() {

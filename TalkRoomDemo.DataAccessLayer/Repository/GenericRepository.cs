@@ -35,6 +35,11 @@ namespace TalkRoomDemo.DataAccessLayer.Repository
         {
             return _object.Find(id);
         }
+        public async Task<T> GetByIdAsync(int id)
+        {
+            return await _object.FindAsync(id);
+        }
+
 
         public void Insert(T entity)
         {
@@ -56,6 +61,12 @@ namespace TalkRoomDemo.DataAccessLayer.Repository
             addEntity.State = EntityState.Added;
             await _context.SaveChangesAsync();
 
+        }
+
+        public async Task UpdateAsync(T entity)
+        {
+            _object.Update(entity);
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -16,6 +16,6 @@ namespace TalkRoomDemo.EntityLayer.Concrete
         public AppUser ReceiverUser { get; set; } // alıcı kullanıcının adı
 
         public DateTime SendAt { get; set; } // isteğin gönderildiği tarih ve saat
-        public bool IsAccepted { get; set; } // isteğin kabul edilip edilmediği
+        public int IsAccepted { get; set; } // isteğin kabul edilip edilmediği
     }
 }

@@ -8,6 +8,7 @@ namespace TalkRoomDemo.DtoLayer.Dtos
 {
     public class AppUserFriendListDto
     {
+        public int Id { get; set; } // tablodaki verinin id'si
         public int FriendId { get; set; } //listedeki arkadaşın Id'si
         public string FriendUserName { get; set; } // listedeki arkadaşın Kullanıcı adı
         public bool IsOnline { get; set; } // listedeki arkadaşın çevrim durumu

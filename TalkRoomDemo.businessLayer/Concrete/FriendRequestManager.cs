@@ -51,6 +51,16 @@ namespace TalkRoomDemo.businessLayer.Concrete
         {
             _friendRequestDal.Update(entity);
         }
-       
+
+        public async Task<FriendRequest> GetByIdAsync(int id)
+        {
+            var user = await _friendRequestDal.GetByIdAsync(id);
+            return user;
+        }
+        public async Task TUpdateAsync(FriendRequest entity)
+        {
+            await _friendRequestDal.UpdateAsync(entity);
+        }
+      
     }
 }

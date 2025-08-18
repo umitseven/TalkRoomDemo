@@ -65,6 +65,22 @@ namespace TalkRoomDemo.PresentationLayer.Hubs
         {
             await Clients.Caller.SendAsync("ReceiveOnlineUsers", OnlineUsers.Keys);
         }
+
+        public async Task SendFriendRequest(int requestId, string senderName, string receiverUserId)
+        {
+            if(OnlineUsers.TryGetValue(receiverUserId, out var connectionId))
+            {
+                await Clients.Client(connectionId).SendAsync("ReceiveFriendRequest", senderName, requestId);
+            }
+        }
+        public async Task RespondFriendRequest(string senderUserId, string receiverUserId, int IsAccepted)
+        {
+            if(OnlineUsers.TryGetValue(senderUserId, out var connectionId))
+            {
+                await Clients.Client(connectionId).SendAsync("FriendRequestResponse", receiverUserId, IsAccepted);
+            }
+        }
+       
     }
 }
     

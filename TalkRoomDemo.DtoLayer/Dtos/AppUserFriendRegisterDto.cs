@@ -13,6 +13,6 @@ namespace TalkRoomDemo.DtoLayer.Dtos
         public int ReceiverUserId { get; set; } // alıcı kullanıcı ID'si
         public string ReceiverUserName { get; set; } // alıcı kullanıcı adı
         public DateTime RequestSentAt { get; set; } // isteğin gönderildiği tarih ve saat
-        public bool IsAccepted { get; set; } // isteğin kabul edilip edilmediği durumu
+        public int IsAccepted { get; set; } // isteğin kabul edilip edilmediği durumu
     }
 }

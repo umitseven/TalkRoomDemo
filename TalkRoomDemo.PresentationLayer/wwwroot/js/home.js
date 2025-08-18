@@ -121,6 +121,25 @@ function showCopyNotification2() {
     }, 2500); // 5 saniye sonra kayboluyor
 }
 
+function showAlertIcon() {
+    document.getElementById("alertIcon").classList.add("active");
+}
+
+const bellIcon = document.getElementById("bellIcon");
+const panel = document.getElementById("notificationPanel");
+
+bellIcon.addEventListener("click", () => {
+    panel.classList.toggle("hidden");
+});
+
+// Panel dışına tıklanınca kapanması için:
+document.addEventListener("click", (event) => {
+    if (!bellIcon.contains(event.target) && !panel.contains(event.target)) {
+        panel.classList.add("hidden");
+
+    }
+});
+
 
 
 openModalBtn.addEventListener('click', () => {

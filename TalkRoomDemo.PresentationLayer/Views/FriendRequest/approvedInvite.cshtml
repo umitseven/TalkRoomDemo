@@ -1,0 +1,44 @@
+﻿@using TalkRoomDemo.DtoLayer.Dtos
+@model List<AppUserFriendListDto>
+
+@if (Model != null && Model.Count > 0)
+{
+    foreach (var request in Model)
+    {
+        <div class="user-details" data-request-id="@request.Id">
+            <a class="username" href="/#/@request.FriendUserName">
+                @request.FriendUserName adlı kullanıcı sizinle arkadaşlık kurmak istiyor
+            </a>
+
+            <button type="button"
+                    data-url="@Url.Action("ApprovedInvite", "FriendRequest", new { requestId = request.Id })"
+                    class="accept-btn">
+                Kabul
+            </button>
+
+            <button type="button"
+                    data-url="@Url.Action("RejectInvite", "FriendRequest", new { requestId = request.Id })"
+                    class="reject-btn">
+                Reddet
+            </button>
+        </div>
+        
+    }
+    <script>
+        document.addEventListener("click", async (e) => {
+            if (e.target.classList.contains("accept-btn") || e.target.classList.contains("reject-btn")) {
+                const url = e.target.dataset.url;
+
+                const res = await fetch(url, {
+                    method: "POST"
+                });
+
+                if (res.ok) {
+                    // sadece ilgili daveti kaldır
+                    e.target.closest(".user-details").remove();
+                }
+            }
+        });
+    </script>
+}
+

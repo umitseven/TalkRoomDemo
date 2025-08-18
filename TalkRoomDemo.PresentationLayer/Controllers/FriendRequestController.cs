@@ -52,17 +52,81 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                 SenderUserId = currentUserId,
                 ReceiverUserId = targetUser.Id,
                 SendAt = DateTime.Now,
-                IsAccepted = true
+                IsAccepted = 0 // beklemeye alındı
             };
+            // 0 bekleme 1 kabul edildi 2 reddedildi
            
             await _friendRequestService.TInsertAsync(friendRequest);
-            await _friendService.CreateFriendshipAsync(currentUserId, targetUser.Id);
-            await _hubContext.Clients.User(currentUserId.ToString()).SendAsync("ReceiveFriendListUpdate");
-            await _hubContext.Clients.User(targetUser.Id.ToString()).SendAsync("ReceiveFriendListUpdate");
-           
+            //await _friendService.CreateFriendshipAsync(currentUserId, targetUser.Id);
+            //await _hubContext.Clients.User(currentUserId.ToString()).SendAsync("ReceiveFriendListUpdate");
+            //await _hubContext.Clients.User(targetUser.Id.ToString()).SendAsync("ReceiveFriendListUpdate");
+            await _hubContext.Clients.User(targetUser.Id.ToString())
+        .SendAsync("ReceiveFriendRequest", User.Identity.Name, friendRequest.Id);
+
             return RedirectToAction("Index", "Home");
+            // pop up gelebilir
         }
 
-       
+        [HttpPost]
+        public async Task<IActionResult> approvedInvite(int requestId)
+        {
+            var curentUserIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currenUsertId = int.Parse(curentUserIdStr);
+
+            var request = await _friendRequestService.GetByIdAsync(requestId);
+
+            if (request.ReceiverUserId != currenUsertId)
+                return Unauthorized();
+
+            
+
+            var friendRequest = new FriendRequest
+            {   
+                SenderUserId = currenUsertId,
+                ReceiverUserId = request.Id,
+                SendAt = DateTime.Now,
+                IsAccepted = 0 // beklemeye alındı
+            };
+
+            if (request.IsAccepted == 0)
+            { 
+                await _friendRequestService.TUpdateAsync(request);
+
+                request.IsAccepted = 1; // onaylandı
+            
+                await _friendService.CreateFriendshipAsync(request.SenderUserId, request.ReceiverUserId);
+                await _hubContext.Clients.User(request.SenderUserId.ToString()).SendAsync("ReceiveFriendListUpdate");
+                await _hubContext.Clients.User(request.ReceiverUserId.ToString()).SendAsync("ReceiveFriendListUpdate");
+
+                return Ok();
+            }
+            return BadRequest("Bu istek zaten işlenmiş."); // pop gelebilir.
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RejectInvite(int requestId)
+        {
+            var currentUserIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var currentUserId = int.Parse(currentUserIdStr);
+
+            var request = await _friendRequestService.GetByIdAsync(requestId);
+            if(request.ReceiverUserId != currentUserId)
+            {
+                return Unauthorized();
+            }
+
+            if(request.IsAccepted == 0)
+            { 
+
+                request.IsAccepted = 2; // reddedildi
+                await _friendRequestService.TUpdateAsync(request);
+                return Ok();
+            }
+
+            return BadRequest("Bu istek zaten işlenmiş.");
+        }
+
+
+
     }
 }

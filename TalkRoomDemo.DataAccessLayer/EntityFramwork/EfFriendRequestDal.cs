@@ -49,6 +49,10 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
             };
 
         }
+        public async Task<FriendRequest> GetByIdAsync(int id)
+        {
+            return await _context.FriendRequests.FindAsync(id);
+        }
        
     }
 }
