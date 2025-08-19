@@ -9,6 +9,7 @@ namespace TalkRoomDemo.DtoLayer.Dtos
     public class AppUserFriendRegisterDto
     {
         public int SenderUserId { get; set; } // gönderen kullanıcı ID'si
+        public string ProfilImage { get; set; } // gönderen kullanıcın profil resmi
         public string SenderUserName { get; set; } // gönderen kullanıcı adı
         public int ReceiverUserId { get; set; } // alıcı kullanıcı ID'si
         public string ReceiverUserName { get; set; } // alıcı kullanıcı adı

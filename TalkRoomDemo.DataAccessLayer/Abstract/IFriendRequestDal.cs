@@ -12,7 +12,10 @@ namespace TalkRoomDemo.DataAccessLayer.Abstract
     {
         Task<List<AppUserFriendRegisterDto>> GetAllFriendRegister(int userId);
         Task<AppUserFriendRegisterDto> GetFriendRequestAsync(int senderId, int receiverId);
-        Task<FriendRequest> GetByIdAsync(int id);
+        Task<List<FriendRequest>> GetRequestsByReceiverId(int receiverId);
+
+        Task<List<FriendRequest>> GetPendingRequestByReceiverAsync(int receiverId);
+        Task DeleteAsync(FriendRequest entity);
 
     }
 }

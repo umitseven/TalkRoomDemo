@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Azure.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -61,6 +62,37 @@ namespace TalkRoomDemo.businessLayer.Concrete
         {
             await _friendRequestDal.UpdateAsync(entity);
         }
-      
+
+        public async Task<List<FriendRequest>> GetPendingRequestByReceiverAsync(int receiverId)
+        {
+            return await _friendRequestDal.GetPendingRequestByReceiverAsync(receiverId);
+        }
+
+        public async Task<List<FriendRequestDto>> GetFriendRequestsByReceiverId(int receviverId)
+        {
+            var requests = await _friendRequestDal.GetRequestsByReceiverId(receviverId);
+            var dtoList = new List<FriendRequestDto>();
+            foreach (var request in requests)
+            {
+                if (request.SenderUser == null) continue;
+
+                dtoList.Add(new FriendRequestDto
+                {
+                    Id = request.Id,
+                    SenderUserId = request.SenderUserId,
+                    SenderUserName = request.SenderUser.UserName,
+                    SenderProfilePictureUrl = request.SenderUser.ImageUrl,
+                    SendAt = request.SendAt
+                });
+
+            }
+            return dtoList;
+
+        }
+
+        public async Task TDeleteAsync(FriendRequest entity)
+        {
+            await _friendRequestDal.DeleteAsync(entity);
+        }
     }
 }

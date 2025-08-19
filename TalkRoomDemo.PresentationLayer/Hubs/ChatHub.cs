@@ -80,6 +80,10 @@ namespace TalkRoomDemo.PresentationLayer.Hubs
                 await Clients.Client(connectionId).SendAsync("FriendRequestResponse", receiverUserId, IsAccepted);
             }
         }
+        public async Task SendFriendListUpdate(string userId)
+        {
+            await Clients.User(userId).SendAsync("RecaiveFriendListUpdate");
+        }
        
     }
 }

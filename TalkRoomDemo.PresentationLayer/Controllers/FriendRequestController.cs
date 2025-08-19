@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TalkRoomDemo.businessLayer.Abstract;
 using TalkRoomDemo.DataAccessLayer.Abstract;
+using TalkRoomDemo.DtoLayer.Dtos;
 using TalkRoomDemo.EntityLayer.Concrete;
 using TalkRoomDemo.PresentationLayer.Hubs;
 
@@ -97,8 +98,10 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                 await _friendService.CreateFriendshipAsync(request.SenderUserId, request.ReceiverUserId);
                 await _hubContext.Clients.User(request.SenderUserId.ToString()).SendAsync("ReceiveFriendListUpdate");
                 await _hubContext.Clients.User(request.ReceiverUserId.ToString()).SendAsync("ReceiveFriendListUpdate");
+                await _friendRequestService.TDeleteAsync(request);
+                await _hubContext.Clients.User(currenUsertId.ToString()).SendAsync("RecaiveFriendListUpdate"); // buraya signal bağlanacak
 
-                return Ok();
+                return RedirectToAction("Index","Home");
             }
             return BadRequest("Bu istek zaten işlenmiş."); // pop gelebilir.
         }
@@ -123,10 +126,27 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                 return Ok();
             }
 
+            await _friendRequestService.TDeleteAsync(request);
+            await _hubContext.Clients.User(currentUserId.ToString()).SendAsync("RecaiveFriendListUpdate"); // buraya signal bağlanacak
             return BadRequest("Bu istek zaten işlenmiş.");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetFriendList()
+        {
+            var userStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userStr)) return PartialView("GetFriendList", null);
+            var UserId = int.Parse(userStr); // bu senderId yani kullanıcının kendi Idsi
+            var user = await _friendRequestService.GetFriendRequestsByReceiverId(UserId);
+            if (user == null)
+            {
+                Console.WriteLine("FriendRequestDto null döndü.");
+                return PartialView("GetFriendList", null);
+            }
+            await _hubContext.Clients.User(UserId.ToString()).SendAsync("ReceiveFriendListUpdate");
+            return PartialView("GetFriendList", user);
 
+        }
 
     }
 }

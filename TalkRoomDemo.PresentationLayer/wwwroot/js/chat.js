@@ -51,6 +51,18 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("arkadaş listesi güncellendi")
         $("#friendListContainer").load("/Friend/GetFriendPartial");
     });
+    connection.on("RecaiveFriendRequstUpdate", function () {
+        console.log("arkadaş davetleri güncellendi")
+        $("notificationBox").load("/FriendRequest/GetFriendList");
+    });
+    connection.on("RecaiveFriendListUpdate", function () {
+        console.log("Bildirim kutusu güncellendi")
+        fetch("/FriendRequst/GetFriendList")
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById("notificationPanel").innerHTML = html;
+            });
+    });
    
 
     connection.on("UserOnline", function (user) {
@@ -77,17 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
-    connection.on("ReceiveFriendRequest", function (senderName, requestId) {
-        const html = `
-        <form data-request-id="${requestId}" action="/FriendRequest/approvedInvite" method="post">
-            <input type="hidden" name="requestId" value="${requestId}" />
-            <span>${senderName} sana arkadaşlık isteği gönderdi.</span>
-            <button type="submit">Kabul</button>
-            <button type="submit" formaction="/FriendRequest/RejectInvite">Reddet</button>
-        </form>
-    `;
-        $("#notificationBox").append(html);
-    });
+    
     connection.on("FriendRequestResponse", function (userId, IsAccepted) {
         if (IsAccepted === 1) {
             alert("Arkadaşlık kabul edildi!");

@@ -29,6 +29,15 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
                 }).ToListAsync();
             return values;
         }
+        public async Task<List<FriendRequest>> GetPendingRequestByReceiverAsync(int receiverId)
+        {
+            return await _context.FriendRequests
+                 .Where(fr => fr.ReceiverUserId == receiverId && fr.IsAccepted == 0)
+                 .Include(fr => fr.SenderUser)
+                 .Include(fr => fr.ReceiverUser)
+                 .ToListAsync();
+
+        }
         public async Task<AppUserFriendRegisterDto> GetFriendRequestAsync(int senderId, int receiverId)
         {
             var fr = await _context.FriendRequests
@@ -49,10 +58,19 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
             };
 
         }
-        public async Task<FriendRequest> GetByIdAsync(int id)
+        public async Task<List<FriendRequest>> GetRequestsByReceiverId(int receiverId)
         {
-            return await _context.FriendRequests.FindAsync(id);
+            return await _context.FriendRequests
+           .Include(fr => fr.SenderUser)
+           .Where(fr => fr.ReceiverUserId == receiverId)
+           .ToListAsync();
+
         }
-       
+
+        public async Task DeleteAsync(FriendRequest entity)
+        {
+            _context.Set<FriendRequest>().Remove(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 }

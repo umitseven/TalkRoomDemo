@@ -13,6 +13,9 @@ namespace TalkRoomDemo.businessLayer.Abstract
         Task<List<AppUserFriendRegisterDto>> TGetAllFriendRegister(int userId);
         Task TInsertAsync(FriendRequest entity);
         Task<FriendRequest> GetByIdAsync(int id);
+        Task<List<FriendRequestDto>> GetFriendRequestsByReceiverId(int id);
         Task TUpdateAsync(FriendRequest entity);
+        Task<List<FriendRequest>> GetPendingRequestByReceiverAsync(int receiverId);
+        Task TDeleteAsync(FriendRequest entity);
     }
 }
