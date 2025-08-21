@@ -1,5 +1,6 @@
 ﻿using TalkRoomDemo.businessLayer.Abstract;
 using TalkRoomDemo.DataAccessLayer.Abstract;
+using TalkRoomDemo.DataAccessLayer.EntityFramwork;
 using TalkRoomDemo.DtoLayer.Dtos;
 using TalkRoomDemo.EntityLayer.Concrete;
 
@@ -31,6 +32,13 @@ namespace TalkRoomDemo.businessLayer.Concrete
             };
             await _friendDal.InsertAsync(friendship);
             await _friendDal.InsertAsync(reverseFriendship);
+        }
+
+        public async Task<Friends?> GetExistingRequestAsync(int userId1, int userId2)
+        {
+            return await _friendDal.GetAsync(fr => (fr.UserId == userId1 && fr.FriendId == userId2) ||
+           (fr.UserId == userId2 && fr.FriendId == userId1)
+           );
         }
 
         public void TDelete(Friends entity)

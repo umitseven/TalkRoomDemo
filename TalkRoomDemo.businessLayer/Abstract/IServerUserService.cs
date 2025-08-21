@@ -11,6 +11,7 @@ namespace TalkRoomDemo.businessLayer.Abstract
     public interface IServerUserService : IGenericService<ServerUser>
     {
         Task<List<ServerUserDto>> GetServerUsersAsync(int serverId);
+        Task<List<ServerUserDto>> GetAllServerUserListAsync(int userId);
         void UserConnected(int userId);
         void UserDisconnected(int userId);
         bool IsOnline(int userId);

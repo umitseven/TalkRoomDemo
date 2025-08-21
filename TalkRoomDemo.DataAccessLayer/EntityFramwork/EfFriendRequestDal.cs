@@ -62,7 +62,7 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
         {
             return await _context.FriendRequests
            .Include(fr => fr.SenderUser)
-           .Where(fr => fr.ReceiverUserId == receiverId)
+           .Where(fr => fr.ReceiverUserId == receiverId && fr.IsAccepted == 0)
            .ToListAsync();
 
         }

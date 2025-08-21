@@ -9,6 +9,7 @@ using TalkRoomDemo.DataAccessLayer.AppDbContext;
 using TalkRoomDemo.DataAccessLayer.Repository;
 using TalkRoomDemo.DtoLayer.Dtos;
 using TalkRoomDemo.EntityLayer.Concrete;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
 {
@@ -34,6 +35,25 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
             return values;
         }
 
-      
+        public async Task<List<ServerUserDto>> GetAllServerUserListAsync(int userId)
+        {
+            var servers = await (from su in _context.ServerUsers
+                                 join s in _context.Servers on su.ServerId equals s.Id
+                                 join u in _context.Users on s.CreatorUserId equals u.Id
+                                 where su.UserId == userId
+                                 select new ServerUserDto
+                                 {
+                                     ServerID = s.Id,
+                                     ServerName = s.Name,
+                                     ServerImageUrl = s.ServerImageUrl,
+                                     CreatorUserId = s.CreatorUserId,
+                                     CreatorUserName = u.UserName
+                                 }).ToListAsync();
+            Console.WriteLine("ServerUser eşleşen kayıt sayısı: " + servers.Count);
+
+
+            return servers;
+        }
+
     }
 }

@@ -19,6 +19,9 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
         {
             _context = contex;
         }
+
+       
+
         public async Task <List<AppUserFriendListDto>> GetFriendsByUserId(int userId)
         {
             var values = await _context.Friend.Where(f => f.UserId == userId).Select(f => new AppUserFriendListDto

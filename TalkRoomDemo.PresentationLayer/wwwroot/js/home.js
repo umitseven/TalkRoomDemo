@@ -5,7 +5,7 @@
     let source;
     let gainNode;
 
-    const volumePopup = document.getElementById("volume-popup");
+    const volumePopup = document.getElementById("volume-popup");    
     const volumeSlider = document.getElementById("volumeSlider");
     const muteCheckbox = document.getElementById("muteCheckbox");
     const chatBox = document.querySelector('.chat-box');
@@ -53,7 +53,8 @@ const openModalBtn = document.getElementById('openModalBtn');
 const roomModal = document.getElementById('roomModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const createRoomForm = document.getElementById('createRoomForm');
-const roomNameInput1 = document.getElementById('roomName');
+const roomNameInput1 = document.getElementById('roomName'); // input id
+ 
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -98,12 +99,12 @@ document.addEventListener("DOMContentLoaded", function () {
 function showCopyNotification() {
     const notification = document.getElementById('copyNotification');
     notification.style.opacity = '1';
-    notification.style.bottom = '40px'; // yukarı doğru hafif hareket
+    //notification.style.top = '0px'; // yukarı doğru hafif hareket
     notification.style.pointerEvents = 'auto';
 
     setTimeout(() => {
         notification.style.opacity = '0';
-        notification.style.bottom = '20px'; // eski haline dönüyor
+        //notification.style.top = '0px'; // eski haline dönüyor
         notification.style.pointerEvents = 'none';
     }, 2500); // 5 saniye sonra kayboluyor
 }
@@ -139,7 +140,6 @@ document.addEventListener("click", (event) => {
 
     }
 });
-
 
 
 openModalBtn.addEventListener('click', () => {

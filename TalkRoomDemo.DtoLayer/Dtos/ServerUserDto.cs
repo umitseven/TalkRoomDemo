@@ -12,5 +12,11 @@ namespace TalkRoomDemo.DtoLayer.Dtos
         public string UserName { get; set; } // kullanıcı adları
         public string AvatarUrl { get; set; } // kullanıcı avatar URL'leri
         public bool IsOnline { get; set; } // kullanıcının çevrimiçi durumu
+
+        public int ServerID { get; set; }
+        public string ServerName { get; set; }
+        public string ServerImageUrl { get; set; }
+        public int CreatorUserId { get; set; }
+        public string CreatorUserName { get; set; }
     }
 }

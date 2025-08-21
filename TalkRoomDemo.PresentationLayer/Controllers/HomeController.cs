@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,11 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
     {   
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly INotyfService _notyf;
 
-        public HomeController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public HomeController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, INotyfService notyf)
         {
+            _notyf = notyf;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -82,9 +85,8 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
 
                 await HttpContext.SignOutAsync(); // sadece mevcut çerezi siler
                 await HttpContext.SignInAsync("Identity.Application", principal); // yeni çerez
-                // yeni çerez oluşturur
-
-                TempData["Success"] = "Profil başarıyla güncellendi.";
+                
+                _notyf.Success("Profil başarıyla güncellendi.");
                 return RedirectToAction("Settings"); // Güncelleme başarılıysa ayarlar sayfasına yönlendir
             }
             else 

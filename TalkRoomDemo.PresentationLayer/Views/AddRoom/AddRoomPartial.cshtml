@@ -1,0 +1,8 @@
+﻿﻿@using TalkRoomDemo.DtoLayer.Dtos
+@model List<ServerListDto>
+
+
+<form class="create-room-form" asp-controller="AddRoom" asp-action="RoomCreate" method="post">
+    <input type="text" name="ServerName"  placeholder="Oda İsmini giriniz" required />
+    <button type="submit">Oluştur</button>
+</form>

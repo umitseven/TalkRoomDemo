@@ -1,0 +1,17 @@
+﻿@model List<TalkRoomDemo.DtoLayer.Dtos.ServerListDto>
+
+
+    @if(Model != null && Model.Any())
+    {
+        @foreach (var item in Model)
+        {
+             <a href="@item.ServerID">
+                
+                <img class="serverChanel" src="@item.ServerImageUrl" title="@item.ServerName"/>
+            </a>
+        }
+    }
+    else
+    {
+        <p> hiç bir veri bulunamadı</p>
+    }

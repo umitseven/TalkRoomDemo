@@ -13,6 +13,7 @@ namespace TalkRoomDemo.businessLayer.Abstract
     {
         Task <List<AppUserFriendListDto>> TGetFriendsByUserId(int id);
         Task CreateFriendshipAsync(int senderUserId, int receiverUserId);
-       
+        Task<Friends?> GetExistingRequestAsync(int userId1, int userId2);
+
     }
 }

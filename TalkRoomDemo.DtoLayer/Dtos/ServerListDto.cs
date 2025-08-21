@@ -10,7 +10,7 @@ namespace TalkRoomDemo.DtoLayer.Dtos
     {
         public int ServerID { get; set; } // kanalın ID'si
         public string ServerName { get; set; } // kanalın adı
-        public List<ServerMessageDto> Messages { get; set; } // kanalın mesajları
+        public List<ServerMessageDto> Messages { get; set; } // kanalın mesajları dto ??? dtoda mesajlar tutulur mu ???
         public string ServerImageUrl { get; set; } // kanalın resim URL'si
         public int CreatorUserId { get; set; } // kanalı oluşturan kullanıcının ID'si
         public string CreatorUserName { get; set; } // kanalı oluşturan kullanıcının adı

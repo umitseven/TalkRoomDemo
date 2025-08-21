@@ -17,5 +17,7 @@ namespace TalkRoomDemo.businessLayer.Abstract
         Task TUpdateAsync(FriendRequest entity);
         Task<List<FriendRequest>> GetPendingRequestByReceiverAsync(int receiverId);
         Task TDeleteAsync(FriendRequest entity);
+        Task<FriendRequest?> GetExistingRequestAsync(int userId1, int userId2);
+
     }
 }

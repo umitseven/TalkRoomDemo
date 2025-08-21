@@ -94,5 +94,13 @@ namespace TalkRoomDemo.businessLayer.Concrete
         {
             await _friendRequestDal.DeleteAsync(entity);
         }
+
+        public async Task<FriendRequest?> GetExistingRequestAsync(int userId1, int userId2)
+        {
+            return await _friendRequestDal.GetAsync(fr => (fr.SenderUserId == userId1 && fr.ReceiverUserId == userId2) ||
+            (fr.SenderUserId == userId2 && fr.ReceiverUserId == userId1)
+            );
+
+        }
     }
 }

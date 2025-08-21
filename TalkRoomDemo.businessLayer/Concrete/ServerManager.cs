@@ -34,7 +34,9 @@ namespace TalkRoomDemo.businessLayer.Concrete
         }
         public async Task<List<ServerListDto>> TGetAllServerListAsync(int userId)
         {
+            // :) creator ??
             return await _serverDal.GetAllServerListAsync(userId);
+
         }
 
         public void TInsert(Server entity)
@@ -45,6 +47,11 @@ namespace TalkRoomDemo.businessLayer.Concrete
         public void TUpdate(Server entity)
         {
             _serverDal.Update(entity);
+        }
+
+        public Task<List<ServerUserDto>> TGetAllServerUserListAsync(int userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -7,13 +7,28 @@ using TalkRoomDemo.DataAccessLayer.EntityFramwork;
 using TalkRoomDemo.EntityLayer.Concrete;
 using TalkRoomDemo.PresentationLayer.Hubs;
 using TalkRoomDemo.PresentationLayer.Models;
+using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
+using AspNetCoreHero.ToastNotification.Notyf;
+
+
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-// Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Toast servisini ekle
+builder.Services.AddNotyf(config =>
+{
+    config.DurationInSeconds = 5;
+    config.IsDismissable = true;
+    config.Position = NotyfPosition.TopRight;
+});
+
+
+
+
 builder.Services.AddSignalR();
 builder.Services.AddDbContext<Context>();
    
@@ -51,10 +66,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseNotyf();
 
 app.MapControllerRoute(
     name: "default",

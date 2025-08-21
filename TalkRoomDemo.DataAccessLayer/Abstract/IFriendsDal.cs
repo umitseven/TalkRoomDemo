@@ -11,5 +11,6 @@ namespace TalkRoomDemo.DataAccessLayer.Abstract
     public interface  IFriendsDal : IGenericDal<Friends>
     {
         Task <List<AppUserFriendListDto>> GetFriendsByUserId(int userId);
+        
     }
 }

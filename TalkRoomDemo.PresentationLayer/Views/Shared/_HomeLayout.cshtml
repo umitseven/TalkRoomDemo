@@ -1,11 +1,14 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <title>TalkRoom</title>
     <link rel="stylesheet" href="~/css/home.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
 </head>
+ 
 <body>
     <div class="app-container">
         <aside class="servers-bar">
@@ -14,14 +17,15 @@
                 <img class="server" src="~/Login/image/Logo.svg" />
                 <div class="element"></div>
             </div>
-            <div><img id="openModalBtn" class="addRomm" src="~/login\image\AddRoom.svg" title="Oda oluşturma" /></div> @*bu kısım yeni oda eklemelerinde olacak olan kısım*@
-            
-            
-            
+            <div><img id="openModalBtn" class="addRomm" src="~/login\image\AddRoom.svg" title="Oda oluşturma" /></div>
+            <div id="serverListContainer">
+                <p>Sunucular yükleniyor...</p>
+               
+            </div>
 
-            
+           
+
         </aside>
-
         <aside class="channels-bar">
             <div class="chanel-header">kanal ismi olacak bölüm</div>
             <div style="border-bottom:2px solid #4c5058" class="element"></div>
@@ -34,10 +38,9 @@
                         <span id="closeModalBtn" class="close">&times;</span>
                         <h2>Yeni Oda Oluştur</h2>
                     </div>
-                    <form id="createRoomForm">
-                        <input type="text" id="roomName" placeholder="Oda adı" required />
-                        <button type="submit">Odayı Oluştur</button>
-                    </form>
+                    <div id="roomList">
+                    @await Html.PartialAsync("~/Views/AddRoom/AddRoomPartial.cshtml")
+                    </div>
                 </div>
             </div>
             <div id="copyNotification2" style="
@@ -71,8 +74,8 @@
             </div>
             <div id="copyNotification" style="
     position: fixed;
-    bottom: 20px;
-    left: 50%;
+    top: 20px;
+    right: 0%;
     transform: translateX(-50%);
     background-color: #4BB543;
     color: white;
@@ -121,32 +124,12 @@
                          style="width:20px; height:20px; position:fixed; margin-left:20px;"
                          class="add-room-btn alert-icon" />
 
-                    @* <img id="bellIcon" style="width: 25px;height: 25px; cursor:pointer;" class="add-room-btn" src="~/login/image/bell.svg" /> *@
+                    <img id="bellIcon" style="width: 25px;height: 25px; cursor:pointer;" class="add-room-btn" src="~/login/image/bell.svg" />
 
-                   @*  <button id="alertBell"
-                            class="notify-bell"
-                            type="button"
-                            aria-label="Bildirimler">
-                        <!-- Zil SVG -->
-                        <svg class="bell-svg" viewBox="0 0 24 24" aria-hidden="true">
-                            <!-- gövde -->
-                            <path d="M14.24 18H4.75a1.25 1.25 0 0 1-1.1-1.84l.64-1.2A7.4 7.4 0 0 0 5 11.25V10a7 7 0 1 1 14 0v1.25c0 1.26.32 2.49.92 3.59l.43.8A1.25 1.25 0 0 1 19.17 18h-4.93z" fill="currentColor" />
-                            <!-- çan dili -->
-                            <circle cx="12" cy="19.5" r="1.8" fill="currentColor" />
-                        </svg>
-
-                        <!-- Bildirim rozeti (sayı varsa göster) -->
-                        <span class="notify-badge" id="alertBadge" hidden>3</span>
-                        <!-- Sadece nokta istiyorsan sayı yerine boş bırak: <span class="notify-badge" id="alertBadge" hidden></span> -->
-                    </button> *@
-
-
-
-                    
                         <div id="notificationPanel" class="notification-panel hidden" style="width:350px !important;">
 
                             <h4>Bildirimler</h4>
-                            <div id="notificationBox">
+                            <div id="notificationBox" class="notification-box">
                             </div>
                         </div>
                    
@@ -156,6 +139,7 @@
 
             <section class="chat-messages">
                 @RenderBody() <!-- Sayfa içeriği buraya gelecek -->
+                
             </section>
 
             
@@ -188,34 +172,15 @@
                                         }
                                     });
                                 });
+
+
                 </script>
-           @*      <script>
-                    // Örnek kullanım
-                    function setNotificationCount(count){
-                      const badge = document.getElementById('alertBadge');
-                      const btn = document.getElementById('alertBell');
 
-                      if(!badge || !btn) return;
-
-                      if(count && count > 0){
-                        badge.textContent = count;   // sadece nokta istersen: badge.textContent = '';
-                        badge.hidden = false;
-                        btn.classList.add('has-unread');
-                      }else{
-                        badge.hidden = true;
-                        btn.classList.remove('has-unread');
-                      }
-                    }
-
-                    // Butona tıklanınca panelini aç/kapat vs.
-                    document.getElementById('alertBell')?.addEventListener('click', () => {
-                      // burada bildirim kutunu aç/kapat
-                      // ör: document.getElementById('notificationPanel').classList.toggle('open');
+                <script>
+                    $(document).ready(function () {
+                        $("#serverListContainer").load("/AddRoom/Index");
                     });
-
-                    // Demo
-                    // setNotificationCount(5);
-                </script> *@
+                </script>
 
             </div>
            
@@ -226,5 +191,8 @@
         window.serverInviteCode = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.FindFirst("FriendCodes")?.Value));
         
     </script>
+    @await Component.InvokeAsync("Notyf")
+
 </body>
+
 </html>

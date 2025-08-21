@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TalkRoomDemo.DataAccessLayer.Abstract;
@@ -67,6 +68,11 @@ namespace TalkRoomDemo.DataAccessLayer.Repository
         {
             _object.Update(entity);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<T> GetAsync(Expression<Func<T, bool>> prediacate)
+        {
+            return await _object.FirstOrDefaultAsync(prediacate);
         }
     }
 }

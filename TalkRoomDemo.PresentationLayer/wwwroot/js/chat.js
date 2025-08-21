@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     connection.on("RecaiveFriendListUpdate", function () {
         console.log("Bildirim kutusu güncellendi")
-        fetch("/FriendRequst/GetFriendList")
+        fetch("/FriendRequest/GetFriendList")
             .then(response => response.text())
             .then(html => {
                 document.getElementById("notificationPanel").innerHTML = html;

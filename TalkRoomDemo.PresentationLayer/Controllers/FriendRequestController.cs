@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using TalkRoomDemo.DtoLayer.Dtos;
 using TalkRoomDemo.EntityLayer.Concrete;
 using TalkRoomDemo.PresentationLayer.Hubs;
 
+
 namespace TalkRoomDemo.PresentationLayer.Controllers
 {
     public class FriendRequestController : Controller
@@ -17,9 +19,11 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IFriendService _friendService;
         private readonly IHubContext<ChatHub> _hubContext;
+        private readonly INotyfService _notyf;
 
-        public FriendRequestController(IFriendRequestService friendRequestService, UserManager<AppUser> userManager, IFriendService friendService, IHubContext<ChatHub> hubContext)
+        public FriendRequestController(IFriendRequestService friendRequestService, UserManager<AppUser> userManager, IFriendService friendService, IHubContext<ChatHub> hubContext, INotyfService notyf)
         {
+            _notyf = notyf;
             _friendRequestService = friendRequestService;
             _userManager = userManager;
             _friendService = friendService;
@@ -30,42 +34,63 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
         public async Task<IActionResult> AcceptInvite(string inviteCode)
         {
             if (string.IsNullOrEmpty(inviteCode))
-                return BadRequest("Kod boş olamaz.");
-
+            { 
+                
+                _notyf.Warning("Lütfen geçerli bir kod giriniz.");
+                return RedirectToAction("Index", "Home");
+            }
             var currentUserIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(currentUserIdStr))
+            { 
                 return Unauthorized();
-
+            }
             int currentUserId = int.Parse(currentUserIdStr);
 
             var targetUser = await _userManager.Users
                 .FirstOrDefaultAsync(u => u.FriendCode == inviteCode);
 
             if(targetUser == null)
-                return NotFound("Davet Kodu Geçersiz.");
+            {
+                _notyf.Warning("Böyle bir davet kodu bulunamadı.");
+                return RedirectToAction("Index", "Home");
+            }
 
             if (targetUser.Id == currentUserId)
-                return BadRequest("Kendine arkadaşlık isteği gönderemezsin");
-
-
-            var friendRequest = new FriendRequest
             {
-                SenderUserId = currentUserId,
-                ReceiverUserId = targetUser.Id,
-                SendAt = DateTime.Now,
-                IsAccepted = 0 // beklemeye alındı
-            };
+                _notyf.Warning("Kendine Arkadaşlık isteği gönderemezsin.");
+                return RedirectToAction("Index", "Home");
+            }
+
+            var existingRequest = await _friendRequestService.GetExistingRequestAsync(currentUserId, targetUser.Id); 
+
+            if(existingRequest != null && existingRequest.IsAccepted == 0)
+            {
+                _notyf.Warning("Kullanıcıya daha önce davet gönderildi.");
+                return RedirectToAction("Index", "Home");
+            }
+            else if(existingRequest != null && existingRequest.IsAccepted == 1)
+            {
+                _notyf.Warning("Kullancı ile arkadaşsınız.");
+                return RedirectToAction("Index", "Home");
+            }
+
+                var friendRequest = new FriendRequest
+                {
+                    SenderUserId = currentUserId,
+                    ReceiverUserId = targetUser.Id,
+                    SendAt = DateTime.Now,
+                    IsAccepted = 0 // beklemeye alındı
+                };
             // 0 bekleme 1 kabul edildi 2 reddedildi
            
             await _friendRequestService.TInsertAsync(friendRequest);
             //await _friendService.CreateFriendshipAsync(currentUserId, targetUser.Id);
-            //await _hubContext.Clients.User(currentUserId.ToString()).SendAsync("ReceiveFriendListUpdate");
-            //await _hubContext.Clients.User(targetUser.Id.ToString()).SendAsync("ReceiveFriendListUpdate");
-            await _hubContext.Clients.User(targetUser.Id.ToString())
-        .SendAsync("ReceiveFriendRequest", User.Identity.Name, friendRequest.Id);
-
+            await _hubContext.Clients.User(currentUserId.ToString()).SendAsync("RecaiveFriendRequstUpdate");
+            await _hubContext.Clients.User(targetUser.Id.ToString()).SendAsync("RecaiveFriendRequstUpdate");
+            await _hubContext.Clients.User(targetUser.Id.ToString()).SendAsync("ReceiveFriendRequest", User.Identity.Name, friendRequest.Id);
+            _notyf.Success("Davet gönderildi.");
             return RedirectToAction("Index", "Home");
-            // pop up gelebilir
+            
         }
 
         [HttpPost]
@@ -98,12 +123,13 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                 await _friendService.CreateFriendshipAsync(request.SenderUserId, request.ReceiverUserId);
                 await _hubContext.Clients.User(request.SenderUserId.ToString()).SendAsync("ReceiveFriendListUpdate");
                 await _hubContext.Clients.User(request.ReceiverUserId.ToString()).SendAsync("ReceiveFriendListUpdate");
-                await _friendRequestService.TDeleteAsync(request);
                 await _hubContext.Clients.User(currenUsertId.ToString()).SendAsync("RecaiveFriendListUpdate"); // buraya signal bağlanacak
 
+                _notyf.Success("Davet kabul edildi.");
                 return RedirectToAction("Index","Home");
             }
-            return BadRequest("Bu istek zaten işlenmiş."); // pop gelebilir.
+            
+            return RedirectToAction("GetFriendList"); 
         }
 
         [HttpPost]
@@ -123,11 +149,11 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
 
                 request.IsAccepted = 2; // reddedildi
                 await _friendRequestService.TUpdateAsync(request);
-                return Ok();
+                _notyf.Warning("Kullanıcı reddedildi");
+                return RedirectToAction("GetFriendList","");
             }
 
-            await _friendRequestService.TDeleteAsync(request);
-            await _hubContext.Clients.User(currentUserId.ToString()).SendAsync("RecaiveFriendListUpdate"); // buraya signal bağlanacak
+            await _hubContext.Clients.User(currentUserId.ToString()).SendAsync("RecaiveFriendListUpdate");
             return BadRequest("Bu istek zaten işlenmiş.");
         }
 
@@ -143,7 +169,7 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                 Console.WriteLine("FriendRequestDto null döndü.");
                 return PartialView("GetFriendList", null);
             }
-            await _hubContext.Clients.User(UserId.ToString()).SendAsync("ReceiveFriendListUpdate");
+            await _hubContext.Clients.User(UserId.ToString()).SendAsync("ReceiveFriendListUpdate"); // bu kısım düzgün çalışmıyor burayı düzenle, alıcı ve göndren kişi aynı anda bildirim gidecek
             return PartialView("GetFriendList", user);
 
         }

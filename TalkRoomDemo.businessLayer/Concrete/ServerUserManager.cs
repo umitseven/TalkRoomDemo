@@ -76,6 +76,11 @@ namespace TalkRoomDemo.businessLayer.Concrete
         {
             _onlineUsers.Remove(userId);    
         }
-      
+
+        public async Task<List<ServerUserDto>> GetAllServerUserListAsync(int userId)
+        {
+            return await _serverUserDal.GetAllServerUserListAsync(userId);
+        }
+
     }
 }
