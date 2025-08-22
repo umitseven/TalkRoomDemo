@@ -13,6 +13,7 @@ namespace TalkRoomDemo.businessLayer.Abstract
     {
         Task<List<ServerListDto>> TGetAllServerListAsync(int userId);
         Task<List<ServerUserDto>> TGetAllServerUserListAsync(int userId);
-
+        Task<Server> GetByIdAsync(int id);
+        Task UpdateAsync(ServerListDto dto);
     }
 }

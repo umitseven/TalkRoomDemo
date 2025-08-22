@@ -74,6 +74,7 @@ namespace TalkRoomDemo.DataAccessLayer.Repository
         {
             return await _object.FirstOrDefaultAsync(prediacate);
         }
+        
     }
 }
 

@@ -120,7 +120,6 @@ body, html {
 .chat-box {
     flex: 1;
     background-color: #36393F;
-    padding: 1rem;
     
 }
     .chat-box ul {

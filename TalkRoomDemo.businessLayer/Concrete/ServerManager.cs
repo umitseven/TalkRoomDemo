@@ -53,5 +53,20 @@ namespace TalkRoomDemo.businessLayer.Concrete
         {
             throw new NotImplementedException();
         }
+
+        public async Task<Server> GetByIdAsync(int id)
+        {
+            return await _serverDal.GetByIdAsync(id);
+        }
+        public async Task UpdateAsync(ServerListDto dto)
+        {
+            var entity = await _serverDal.GetByIdAsync(dto.ServerID);
+            if (entity == null) throw new Exception("Sunucu bulunamadı");
+
+            entity.Name = dto.ServerName;
+            entity.ServerImageUrl = dto.ServerImageUrl;
+
+            await _serverDal.UpdateAsync(entity);
+        }
     }
 }

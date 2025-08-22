@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.IdentityModel.Tokens;
-using StackExchange.Redis;
 using System.Security.Claims;
 using TalkRoomDemo.businessLayer.Abstract;
 using TalkRoomDemo.PresentationLayer.Hubs;

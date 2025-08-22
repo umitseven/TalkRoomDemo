@@ -169,7 +169,7 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                 Console.WriteLine("FriendRequestDto null döndü.");
                 return PartialView("GetFriendList", null);
             }
-            await _hubContext.Clients.User(UserId.ToString()).SendAsync("ReceiveFriendListUpdate"); // bu kısım düzgün çalışmıyor burayı düzenle, alıcı ve göndren kişi aynı anda bildirim gidecek
+            await _hubContext.Clients.User(UserId.ToString()).SendAsync("ReceiveFriendListUpdate");
             return PartialView("GetFriendList", user);
 
         }

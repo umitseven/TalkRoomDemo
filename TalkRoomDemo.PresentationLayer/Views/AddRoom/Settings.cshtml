@@ -1,0 +1,70 @@
+﻿@model TalkRoomDemo.DtoLayer.Dtos.ServerListDto
+@{
+    Layout = null;
+    int currentRoomId = ViewBag.CurrentRoomId ?? 0; // Controller’da set edebilirsin
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>TalkRoom-Ayarlar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="~/css/setting.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf/notyf.min.css" />
+</head>
+<body>
+    <button type="button" onclick=" window.location.href='@Url.Action("Details", "AddRoom", new { id = currentRoomId })'" class="close-btn">✖ Kapat</button>
+    <form asp-action="Settings" asp-controller="AddRoom" method="post">
+        <input type="hidden" asp-for="ServerID" />
+        <div class="settings-container">
+            <div class="profile-header">
+                <img id="profilePreview" src="@Model.ServerImageUrl" alt="Profil Fotoğrafı" class="profile-pic" />
+            </div>
+
+            <div class="form-group">
+                <label for="profileImageUrl">Kanal Fotoğrafı URL</label>
+                <input asp-for="ServerImageUrl" id="profileImageUrl" class="form-control" placeholder="https://..." />
+            </div>
+            <div class="form-group">
+                <label for="username">Kullanıcı Adı</label>
+                <input asp-for="ServerName" id="username" class="form-control" placeholder="Kanalın adı" />
+                
+            </div>
+
+            <button type="submit" id="saveBtn">Kaydet</button>
+        </div>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/notyf/notyf.min.js"></script>
+
+
+    @await Component.InvokeAsync("Notyf")
+
+
+</body>
+
+<script>
+    const profileInput = document.getElementById("profileImageUrl");
+    const profilePreview = document.getElementById("profilePreview");
+
+    const validImageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+    function isValidImageUrl(url) {
+        try {
+            const parsedUrl = new URL(url);
+            const extension = parsedUrl.pathname.split('.').pop().toLowerCase();
+            const isHttp = parsedUrl.protocol === "http:" || parsedUrl.protocol === "https:";
+            const isImage = validImageExtensions.includes(extension);
+            return isHttp && isImage;
+        } catch {
+            return false;
+        }
+    }
+
+  
+
+
+</script>
+
+</html>

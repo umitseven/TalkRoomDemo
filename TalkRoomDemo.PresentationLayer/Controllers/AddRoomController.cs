@@ -1,12 +1,15 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using TalkRoomDemo.businessLayer.Abstract;
+using TalkRoomDemo.DtoLayer.Dtos;
 using TalkRoomDemo.EntityLayer.Concrete;
 using TalkRoomDemo.PresentationLayer.Hubs;
-using TalkRoomDemo.DtoLayer.Dtos;
+using TalkRoomDemo.PresentationLayer.Models;
 
 namespace TalkRoomDemo.PresentationLayer.Controllers
 {
@@ -60,9 +63,54 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                 Role = "Owner"
             };
             _userService.TInsert(serverUser);
-
+            
             _notyf.Success("Yeni oda Başarılı bir şekilde kuruldu.");
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Details", new { id = server.Id });
         }
+        public async Task<IActionResult> Details(int id)
+        {
+            var server = await _serverService.GetByIdAsync(id);
+            if(server == null) return NotFound();
+
+            var dto = new ServerListDto
+            {
+                ServerID = server.Id,
+                ServerName = server.Name,
+                ServerImageUrl = server.ServerImageUrl
+            };
+            
+            HttpContext.Session.SetString("SelectedRoom", dto.ServerName);
+            return View(dto);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Settings(int id)
+        {
+            var channel = await _serverService.GetByIdAsync(id);
+            if (channel == null) return NotFound();
+
+            var SettingDto = new ServerListDto
+            {
+                ServerID = channel.Id,
+                ServerName = channel.Name,
+                ServerImageUrl = channel.ServerImageUrl,
+
+            };
+            ViewBag.CurrentRoomId = id;
+            return View(SettingDto);
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> Settings(ServerListDto dto)
+        {
+            var channel = await _serverService.GetByIdAsync(dto.ServerID);
+            if (channel == null) return NotFound();
+            var data = channel.Name;
+            await _serverService.UpdateAsync(dto);
+            _notyf.Success($"{data} Oda başarılı bir şekilde güncellendi. ");
+            return RedirectToAction("Details", new { id = dto.ServerID });
+        }
+
     }
 }

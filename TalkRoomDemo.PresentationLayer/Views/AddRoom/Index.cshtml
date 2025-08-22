@@ -5,13 +5,14 @@
     {
         @foreach (var item in Model)
         {
-             <a href="@item.ServerID">
-                
+            <a href="@Url.Action("Details", "AddRoom", new { id = item.ServerID })">
+
                 <img class="serverChanel" src="@item.ServerImageUrl" title="@item.ServerName"/>
+
             </a>
         }
     }
     else
     {
-        <p> hiç bir veri bulunamadı</p>
+        
     }

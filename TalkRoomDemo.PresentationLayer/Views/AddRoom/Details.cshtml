@@ -1,0 +1,47 @@
+﻿@model TalkRoomDemo.DtoLayer.Dtos.ServerListDto
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<a href="@Url.Action("Settings", "AddRoom", new { id = Model.ServerID })" style="display: flex;
+   flex-wrap: nowrap;
+   flex-direction: row-reverse;
+   align-items: center;
+   justify-content: flex-start;
+   padding: 10px;
+   font-size: 30px;cursor: pointer;
+    transition: color 0.2s ease;text-decoration: none">⚙️</a>
+<link rel="stylesheet" href="~/css/home.css" />
+<main class="chat-wrapper">
+   
+    <section class="chat-box" id="chatBox">
+
+        <ul id="messagesList" class="messages-list">
+            <p style="font-size: 1.2rem;
+    font-weight: bold;
+    opacity: 50%;
+    display: flex
+;
+    align-items: center;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-around;">@Model.ServerName Odasına girdiniz</p>
+        </ul>
+       
+    </section>
+
+    <footer class="message-input-container">
+        <form class="message-form" id="messageForm">
+            <input type="text" id="messageInput" name="message" placeholder="Mesajını yaz..." autocomplete="off" />
+            <button type="button" id="sendButton">➤</button>
+        </form>
+    </footer>
+</main>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script>
+        window.currentUser = window.currentUser = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.FindFirst("UserName")?.Value));
+    window.currentUserProfileUrl = window.currentUserProfileUrl = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.FindFirst("ImageUrl")?.Value));
+</script>
+<script src="~/js/chat.js"></script>
+

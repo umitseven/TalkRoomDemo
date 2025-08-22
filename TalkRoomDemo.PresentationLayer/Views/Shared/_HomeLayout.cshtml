@@ -1,4 +1,9 @@
-﻿
+﻿@using TalkRoomDemo.DtoLayer.Dtos
+
+@{
+    // Session’dan "SelectedRoom" al, yoksa default yazı göster
+    var selectedRoom = Context.Session.GetString("SelectedRoom") ?? "Bir oda seçin";
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +24,7 @@
             </div>
             <div><img id="openModalBtn" class="addRomm" src="~/login\image\AddRoom.svg" title="Oda oluşturma" /></div>
             <div id="serverListContainer">
-                <p>Sunucular yükleniyor...</p>
+                
                
             </div>
 
@@ -27,11 +32,11 @@
 
         </aside>
         <aside class="channels-bar">
-            <div class="chanel-header">kanal ismi olacak bölüm</div>
+            <div class="chanel-header">@selectedRoom</div>
             <div style="border-bottom:2px solid #4c5058" class="element"></div>
-            <!-- Kanal Listesi -->
             <div class="channel"># genel Sohbet</div>
             <div class="channel"># Sesli Sohbet</div>
+           
             <div id="roomModal" class="modal">
                 <div class="modal-content">
                     <div class="cls-h">
@@ -39,7 +44,7 @@
                         <h2>Yeni Oda Oluştur</h2>
                     </div>
                     <div id="roomList">
-                    @await Html.PartialAsync("~/Views/AddRoom/AddRoomPartial.cshtml")
+                        @await Html.PartialAsync("~/Views/AddRoom/AddRoomPartial.cshtml",new List<ServerListDto> { Model })
                     </div>
                 </div>
             </div>
@@ -110,7 +115,7 @@
                         <input type="range" min="0" max="1" step="0.01" value="1" id="volumeSlider" />
                     </div>
 
-                    <a href="Home/Settings" class="icon-btn settings-btn" style="text-decoration: none; margin-right: 5px;">⚙️</a>
+                    <a href="@Url.Action("Settings", "Home")" class="icon-btn settings-btn" style="text-decoration: none; margin-right: 5px;">⚙️</a>
                 </div>
             </div>
 
@@ -179,6 +184,11 @@
                 <script>
                     $(document).ready(function () {
                         $("#serverListContainer").load("/AddRoom/Index");
+                    });
+                </script>
+                <script>
+                    $(document).ready(function () {
+                        $("#channels-barlars").load("/AddRoom/ChannelBar");
                     });
                 </script>
 

@@ -42,5 +42,11 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
             return servers;
 
         }
+        //public async Task UpdateAsync(ServerListDto dto)
+        //{
+        //    var update = await 
+        //}
+
+
     }
 }
