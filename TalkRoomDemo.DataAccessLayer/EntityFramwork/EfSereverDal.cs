@@ -42,10 +42,18 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
             return servers;
 
         }
-        //public async Task UpdateAsync(ServerListDto dto)
-        //{
-        //    var update = await 
-        //}
+       public void DeleteWithRelations(int id)
+        {
+            var server = _context.Servers
+                .Include(s => s.ServerUsers)
+                .FirstOrDefault(s => s.Id == id);
+            if(server != null)
+            {
+                _context.ServerUsers.RemoveRange(server.ServerUsers);
+                _context.Servers.Remove(server);
+                _context.SaveChanges();
+            }
+        }
 
 
     }

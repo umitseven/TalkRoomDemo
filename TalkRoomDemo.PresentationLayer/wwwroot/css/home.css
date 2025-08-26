@@ -933,7 +933,7 @@ body, html {
 .notification-panel {
     position: absolute;
     top: 48px;
-    right: 21%;
+    right: 14%;
     width: 350px;
     background: #18191c; /* Daha koyu gri */
     color: #dcddde; /* Discord yazý rengi */

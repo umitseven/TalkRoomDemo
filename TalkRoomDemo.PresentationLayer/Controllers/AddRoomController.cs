@@ -118,6 +118,12 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
             var friend = await _friendService.TGetFriendChatByUserId(id);
             return View(friend);
         }
-
+        [HttpPost]
+        public async Task <IActionResult> DeleteRoom(int id)
+        {
+            _serverService.TDelete(id);
+            return RedirectToAction("Home","Index");
+        }
+        
     }
 }

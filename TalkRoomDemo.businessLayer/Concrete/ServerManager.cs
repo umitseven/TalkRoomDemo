@@ -68,5 +68,10 @@ namespace TalkRoomDemo.businessLayer.Concrete
 
             await _serverDal.UpdateAsync(entity);
         }
+
+        public void TDelete(int id)
+        {
+            _serverDal.DeleteWithRelations(id);
+        }
     }
 }

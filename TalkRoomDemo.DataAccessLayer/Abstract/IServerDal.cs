@@ -11,6 +11,7 @@ namespace TalkRoomDemo.DataAccessLayer.Abstract
     public interface IServerDal : IGenericDal<Server>
     {
         Task<List<ServerListDto>> GetAllServerListAsync(int userId);
-        
+        void DeleteWithRelations(int id);
+
     }
 }

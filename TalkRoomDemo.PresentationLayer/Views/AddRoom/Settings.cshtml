@@ -14,26 +14,41 @@
 </head>
 <body>
     <button type="button" onclick=" window.location.href='@Url.Action("Details", "AddRoom", new { id = currentRoomId })'" class="close-btn">✖ Kapat</button>
-    <form asp-action="Settings" asp-controller="AddRoom" method="post">
-        <input type="hidden" asp-for="ServerID" />
-        <div class="settings-container">
-            <div class="profile-header">
-                <img id="profilePreview" src="@Model.ServerImageUrl" alt="Profil Fotoğrafı" class="profile-pic" />
-            </div>
+    <div style="    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    background-color: #23272A;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px #00000050;">
+        <form asp-action="Settings" asp-controller="AddRoom" method="post">
+            <input type="hidden" asp-for="ServerID" />
+            <div class="settings-container">
+                <div class="profile-header">
+                    <img id="profilePreview" src="@Model.ServerImageUrl" alt="Profil Fotoğrafı" class="profile-pic" />
+                </div>
 
-            <div class="form-group">
-                <label for="profileImageUrl">Kanal Fotoğrafı URL</label>
-                <input asp-for="ServerImageUrl" id="profileImageUrl" class="form-control" placeholder="https://..." />
-            </div>
-            <div class="form-group">
-                <label for="username">Kullanıcı Adı</label>
-                <input asp-for="ServerName" id="username" class="form-control" placeholder="Kanalın adı" />
+                <div class="form-group">
+                    <label for="profileImageUrl">Kanal Fotoğrafı URL</label>
+                    <input asp-for="ServerImageUrl" id="profileImageUrl" class="form-control" placeholder="https://..." />
+                </div>
+                <div class="form-group">
+                    <label for="username">Kullanıcı Adı</label>
+                    <input asp-for="ServerName" id="username" class="form-control" placeholder="Kanalın adı" />
                 
-            </div>
+                </div>
 
-            <button type="submit" id="saveBtn">Kaydet</button>
-        </div>
-    </form>
+                <button type="submit" id="saveBtn">Kaydet</button>
+            </div>
+        </form>
+        <form asp-action="DeleteRoom" asp-controller="AddRoom" method="post" style="display:inline;">
+            <input type="hidden" name="id" value="@Model.ServerID" />
+            <button type="submit" class="delete-btn">
+                Sil
+            </button>
+        </form>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/notyf/notyf.min.js"></script>

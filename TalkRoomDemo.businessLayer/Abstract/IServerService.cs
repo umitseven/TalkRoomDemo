@@ -15,5 +15,6 @@ namespace TalkRoomDemo.businessLayer.Abstract
         Task<List<ServerUserDto>> TGetAllServerUserListAsync(int userId);
         Task<Server> GetByIdAsync(int id);
         Task UpdateAsync(ServerListDto dto);
+        void TDelete(int id);
     }
 }
