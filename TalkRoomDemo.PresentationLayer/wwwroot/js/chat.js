@@ -36,8 +36,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         contentDiv.appendChild(usernameDiv);
         contentDiv.appendChild(messageDiv);
-        li.appendChild(img);
-        li.appendChild(contentDiv);
+        if (user === currentUser) {
+            // Senin mesajlarında önce içerik, sonra profil resmi gelsin
+            li.appendChild(contentDiv);
+            li.appendChild(img);
+        } else {
+            // Karşı taraf için önce resim, sonra içerik
+            li.appendChild(img);
+            li.appendChild(contentDiv);
+        }
         messagesList.appendChild(li);
 
         scrollToBottom();

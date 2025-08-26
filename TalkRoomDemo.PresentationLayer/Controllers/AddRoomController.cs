@@ -1,6 +1,4 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
@@ -9,7 +7,6 @@ using TalkRoomDemo.businessLayer.Abstract;
 using TalkRoomDemo.DtoLayer.Dtos;
 using TalkRoomDemo.EntityLayer.Concrete;
 using TalkRoomDemo.PresentationLayer.Hubs;
-using TalkRoomDemo.PresentationLayer.Models;
 
 namespace TalkRoomDemo.PresentationLayer.Controllers
 {
@@ -40,7 +37,6 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
             var user = await _serverService.TGetAllServerListAsync(userId); // Idsine göre bütün kanalları getirecek 
 
             return PartialView("Index", user);
-
         }
 
         [HttpPost]
@@ -84,8 +80,6 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
             HttpContext.Session.SetString("SelectedRoom", dto.ServerName);
             return View(dto);
         }
-
-
         [HttpGet]
         public async Task<IActionResult> Settings(int id)
         {
@@ -119,11 +113,11 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
             return View(friend);
         }
         [HttpPost]
-        public async Task <IActionResult> DeleteRoom(int id)
+        public IActionResult DeleteRoom(int id)
         {
             _serverService.TDelete(id);
-            return RedirectToAction("Home","Index");
+            return RedirectToAction("Home", "Index");
         }
-        
+
     }
 }

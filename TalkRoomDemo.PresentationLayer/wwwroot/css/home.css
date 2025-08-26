@@ -707,8 +707,7 @@ body, html {
     background-color: #40444B;
     padding: 8px 12px;
     border-radius: 8px;
-    display: flex;
-    flex-direction: column;
+    display: inline-block;
     word-break: break-word;
 }
 
