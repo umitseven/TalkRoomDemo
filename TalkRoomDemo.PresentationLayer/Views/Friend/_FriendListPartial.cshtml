@@ -7,7 +7,7 @@
         <div class="user-info">
             <img src="@friend.FriendProfilePictureUrl" alt="Profil" class="profile-pic">
             <div class="user-details" data-userid="@friend.FriendId">
-                <a class="username" style="font-weight: 600; text-decoration: none; color: white;" href="/#/@friend.FriendUserName">
+                <a class="username" style="font-weight: 600; text-decoration: none; color: white;" href="/AddRoom/frUser/@friend.FriendId">
                     @friend.FriendUserName
                 </a>
                 <span class="status @(friend.IsOnline ? "online" : "offline")"></span>

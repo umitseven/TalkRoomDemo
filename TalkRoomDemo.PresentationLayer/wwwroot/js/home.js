@@ -1,60 +1,64 @@
-﻿    let stream;
-    let isMicOn = true;
-    let audioTrack;
-    let audioContext;
-    let source;
-    let gainNode;
+﻿let stream;
+let isMicOn = true;
+let audioTrack;
+let audioContext;
+let source;
+let gainNode;
 
-    const volumePopup = document.getElementById("volume-popup");    
-    const volumeSlider = document.getElementById("volumeSlider");
-    const muteCheckbox = document.getElementById("muteCheckbox");
-    const chatBox = document.querySelector('.chat-box');
+const volumePopup = document.getElementById("volume-popup");
+const volumeSlider = document.getElementById("volumeSlider");
+const muteCheckbox = document.getElementById("muteCheckbox");
 
-    chatBox.scrollTop = chatBox.scrollHeight;
-    async function initMic() {
-        if (!stream) {
+
+
+async function initMic() {
+    if (!stream) {
         stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    audioTrack = stream.getAudioTracks()[0];
+        audioTrack = stream.getAudioTracks()[0];
 
-    audioContext = new AudioContext();
-    source = audioContext.createMediaStreamSource(stream);
-    gainNode = audioContext.createGain();
+        audioContext = new AudioContext();
+        source = audioContext.createMediaStreamSource(stream);
+        gainNode = audioContext.createGain();
 
-    source.connect(gainNode).connect(audioContext.destination);
-        }
+        source.connect(gainNode).connect(audioContext.destination);
     }
+}
 
-    function toggleVolumePopup() {
-        volumePopup.style.display = volumePopup.style.display === 'flex' ? 'none' : 'flex';
+function toggleVolumePopup() {
+    volumePopup.style.display = volumePopup.style.display === 'flex' ? 'none' : 'flex';
     initMic();
-    }
+}
 
+if (volumeSlider) {
     volumeSlider.addEventListener("input", () => {
         if (gainNode) {
-        gainNode.gain.value = volumeSlider.value;
+            gainNode.gain.value = volumeSlider.value;
         }
     });
+}
 
+if (muteCheckbox) {
     muteCheckbox.addEventListener("change", () => {
         if (audioTrack) {
-        audioTrack.enabled = !muteCheckbox.checked;
+            audioTrack.enabled = !muteCheckbox.checked;
         }
     });
+}
 
-    // Dışarı tıklayınca pencereyi kapat
-    document.addEventListener("click", function (event) {
-        const isClickInside = volumePopup.contains(event.target) || event.target.classList.contains("mic-btn");
+// Dışarı tıklayınca pencereyi kapat
+document.addEventListener("click", function (event) {
+    const isClickInside = volumePopup.contains(event.target) || event.target.classList.contains("mic-btn");
     if (!isClickInside) {
         volumePopup.style.display = "none";
-        }
-    });
+    }
+});
 
 const openModalBtn = document.getElementById('openModalBtn');
 const roomModal = document.getElementById('roomModal');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const createRoomForm = document.getElementById('createRoomForm');
 const roomNameInput1 = document.getElementById('roomName'); // input id
- 
+
 
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -154,7 +158,7 @@ window.addEventListener('click', (e) => {
     if (e.target === roomModal) {
         roomModal.style.display = 'none';
     }
-   
+
 });
 createRoomForm.addEventListener('submit', async (e) => {
     e.preventDefault();

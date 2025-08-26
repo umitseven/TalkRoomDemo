@@ -113,14 +113,20 @@ body, html {
     display: flex;
     flex-direction: column;
     height: 100vh;
-    
+    width: 80%;
 }
-
+.channels-bar2{
+    width:20%;
+}
+.bgd {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
 /* Mesajlarýn bulunduðu kutu */
 .chat-box {
     flex: 1;
-    background-color: #36393F;
-    
+    background-color: #0b0d13;
 }
     .chat-box ul {
         scroll-behavior: smooth;
@@ -249,7 +255,7 @@ body, html {
 
 /* === SOL SUNUCU BARI === */
 .servers-bar {
-    width: 60px;
+    width:4%;
     min-width: 60px;
     height: 100vh;
     background-color: #202225;
@@ -398,7 +404,7 @@ body, html {
 
 .chat-header {
     padding: 17px;
-    background-color: #2F3136;
+    background-color: #0b0d13;
     border-bottom: 1px solid #202225;
     flex-shrink: 0;
     display: flex;
@@ -409,6 +415,7 @@ body, html {
 
 .chat-messages {
     flex: 1;
+    background-color: #0b0d13;
 }
 
 .add-room-btn {
@@ -484,6 +491,12 @@ body, html {
         transform: translateY(0);
         opacity: 1;
     }
+}
+.room-name {
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-bottom: 12px;
+
 }
 
 #roomName {
@@ -604,9 +617,14 @@ body, html {
     }
 
     .channels-bar {
-        width: 100%;
-        height: auto;
+        width: 240px;
+        background-color: #0b0d13;
+        color: white;
+        display: flex;
         flex-direction: column;
+        position: relative;
+        height: 100vh;
+        border: 0.5px solid #2f3136;
     }
 
     .channel {
@@ -739,7 +757,7 @@ body, html {
     width: 60px;
     min-width: 60px;
     height: 100vh;
-    background-color: #202225;
+    background-color: #0b0d13;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -747,6 +765,7 @@ body, html {
     overflow-y: auto;
     scrollbar-width: thin; /* Firefox */
     scrollbar-color: #2f3136 transparent;
+    border-right: 0.5px solid #2f3136;
 }
 
     .servers-bar::-webkit-scrollbar {
@@ -790,12 +809,13 @@ body, html {
 /* === KANAL LÝSTESÝ & KULLANICI PANELÝ === */
 .channels-bar {
     width: 240px;
-    background-color: #2f3136;
+    background-color: #0b0d13;
     color: white;
     display: flex;
     flex-direction: column;
     position: relative;
     height: 100vh;
+    border-left: 0.5px solid #2f3136;
 }
 
 .channel-header {
@@ -1029,7 +1049,7 @@ body, html {
 
 .element {
     text-decoration: underline;
-    border-bottom: 1px solid #fff; /* istediðin renk ve kalýnlýk */
+    border: 0.5px solid #2f3136;
 }
 
 .chanel-header {

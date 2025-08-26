@@ -20,13 +20,15 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IHubContext<ChatHub> _hubContext;
         private readonly INotyfService _notyf;
-        public AddRoomController(IServerService serverService, IHubContext<ChatHub> hubContext, INotyfService notyfService, UserManager<AppUser> userManager, IServerUserService userService)
+        private readonly IFriendService _friendService;
+        public AddRoomController(IServerService serverService, IHubContext<ChatHub> hubContext, INotyfService notyfService, UserManager<AppUser> userManager, IServerUserService userService, IFriendService friendService)
         {
             _serverService = serverService;
             _userManager = userManager;
             _hubContext = hubContext;
             _notyf = notyfService;
             _userService = userService;
+            _friendService = friendService;
         }
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -110,6 +112,11 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
             await _serverService.UpdateAsync(dto);
             _notyf.Success($"{data} Oda başarılı bir şekilde güncellendi. ");
             return RedirectToAction("Details", new { id = dto.ServerID });
+        }
+        public async Task <IActionResult> frUser(int id)
+        {
+            var friend = await _friendService.TGetFriendChatByUserId(id);
+            return View(friend);
         }
 
     }

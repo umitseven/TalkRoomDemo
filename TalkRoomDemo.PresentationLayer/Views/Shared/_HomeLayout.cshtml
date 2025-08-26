@@ -1,9 +1,5 @@
 ﻿@using TalkRoomDemo.DtoLayer.Dtos
 
-@{
-    // Session’dan "SelectedRoom" al, yoksa default yazı göster
-    var selectedRoom = Context.Session.GetString("SelectedRoom") ?? "Bir oda seçin";
-}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,21 +18,14 @@
                 <img class="server" src="~/Login/image/Logo.svg" />
                 <div class="element"></div>
             </div>
-            <div><img id="openModalBtn" class="addRomm" src="~/login\image\AddRoom.svg" title="Oda oluşturma" /></div>
+            <div ><img id="openModalBtn" class="addRomm" src="~/login\image\2.svg" title="Oda oluşturma" /></div>
+           
             <div id="serverListContainer">
                 
                
             </div>
 
-           
 
-        </aside>
-        <aside class="channels-bar">
-            <div class="chanel-header">@selectedRoom</div>
-            <div style="border-bottom:2px solid #4c5058" class="element"></div>
-            <div class="channel"># genel Sohbet</div>
-            <div class="channel"># Sesli Sohbet</div>
-           
             <div id="roomModal" class="modal">
                 <div class="modal-content">
                     <div class="cls-h">
@@ -44,7 +33,7 @@
                         <h2>Yeni Oda Oluştur</h2>
                     </div>
                     <div id="roomList">
-                        @await Html.PartialAsync("~/Views/AddRoom/AddRoomPartial.cshtml",new List<ServerListDto> { Model })
+                        @await Html.PartialAsync("~/Views/AddRoom/AddRoomPartial.cshtml", new TalkRoomDemo.DtoLayer.Dtos.ServerListDto())
                     </div>
                 </div>
             </div>
@@ -95,41 +84,19 @@
                 Kopyalandı!
             </div>
 
-            <!-- Kullanıcı Paneli -->
-            <div class="user-panel">
-                <div class="user-info">
-                    <img src="@User.FindFirst("ImageUrl")?.Value" alt="Profil" class="profile-pic">
-                    <div class="user-details">
-                        <div class="username">@User.FindFirst("UserName")?.Value</div>
-                        <div class="status online"></div>
-                    </div>
-                </div>
-                <div class="user-actions">
-                    <button class="icon-btn mic-btn" onclick="toggleVolumePopup()">🎤</button>
 
-                    <div id="volume-popup" class="volume-popup">
-                        <label class="volume-label">
-                            <input type="checkbox" id="muteCheckbox" />
-                            <span>Mute</span>
-                        </label>
-                        <input type="range" min="0" max="1" step="0.01" value="1" id="volumeSlider" />
-                    </div>
-
-                    <a href="@Url.Action("Settings", "Home")" class="icon-btn settings-btn" style="text-decoration: none; margin-right: 5px;">⚙️</a>
-                </div>
-            </div>
-
-        </aside>
-
+            </aside>
         <main class="chat-area">
             <header class="chat-header">
-                @* <button id="openModalBtn" class="add-room-btn">＋ oda oluşturma ikonu resmi vs.</button> *@
+               
+                @*bu kısım bildirim kutusunun olduğu yer*@
+
                 <div class="notification">
                     <img id="alertIcon" src="~/login/image/exclamation.svg"
                          style="width:20px; height:20px; position:fixed; margin-left:20px;"
                          class="add-room-btn alert-icon" />
 
-                    <img id="bellIcon" style="width: 25px;height: 25px; cursor:pointer;" class="add-room-btn" src="~/login/image/bell.svg" />
+                    <img id="bellIcon" style="width: 25px;height: 25px; cursor:pointer;" class="add-room-btn" src="~/login/image/3.svg" />
 
                         <div id="notificationPanel" class="notification-panel hidden" style="width:350px !important;">
 
@@ -138,12 +105,12 @@
                             </div>
                         </div>
                    
-                </div> @*bu kısım bildirim kutusunun olduğu yer*@
+                </div> 
                 
             </header>
 
             <section class="chat-messages">
-                @RenderBody() <!-- Sayfa içeriği buraya gelecek -->
+                @RenderBody()
                 
             </section>
 
@@ -156,7 +123,9 @@
                 Arkadaş Listesi
                 <button id="openModalBtn2" class="add-room-btn">＋</button>
             </div>
-            <div style="border-bottom:2px solid #4c5058" class="element"></div>
+            <div style="border: 0.5px solid #2f3136;" class="element"></div>
+
+
             <!-- arkadaş listesi -->
             
             <div id="friendListContainer">
@@ -188,7 +157,7 @@
                 </script>
                 <script>
                     $(document).ready(function () {
-                        $("#channels-barlars").load("/AddRoom/ChannelBar");
+                            $("#channels-barlars").load("/AddRoom/ChannelBar");
                     });
                 </script>
 

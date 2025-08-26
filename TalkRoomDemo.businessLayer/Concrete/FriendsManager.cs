@@ -56,6 +56,11 @@ namespace TalkRoomDemo.businessLayer.Concrete
             return _friendDal.GetById(id);
         }
 
+        public async Task<FriendChatDto> TGetFriendChatByUserId(int id)
+        {
+            return await _friendDal.GetFriendChatByUserId(id);
+        }
+
         public async Task <List<AppUserFriendListDto>> TGetFriendsByUserId(int userId)
         {
             return await _friendDal.GetFriendsByUserId(userId);

@@ -35,5 +35,16 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
                 .ToListAsync();
             return values;
         }
+        public async Task<FriendChatDto> GetFriendChatByUserId(int id)
+        {
+            var values = await _context.Friend.Where(f => f.UserId == id).Select(f => new FriendChatDto
+            {
+                FriendId = f.User.Id,
+                FriendName = f.User.UserName,
+                FriendImageUrl = f.User.ImageUrl
+            }).FirstOrDefaultAsync();
+
+            return values;
+        }
     }
 }

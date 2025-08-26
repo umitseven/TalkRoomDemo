@@ -1,47 +1,263 @@
 ﻿@model TalkRoomDemo.DtoLayer.Dtos.ServerListDto
+
 @{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+    Layout = "_HomeLayout";
 }
+<div class="app-container-discord">
 
-<a href="@Url.Action("Settings", "AddRoom", new { id = Model.ServerID })" style="display: flex;
-   flex-wrap: nowrap;
-   flex-direction: row-reverse;
-   align-items: center;
-   justify-content: flex-start;
-   padding: 10px;
-   font-size: 30px;cursor: pointer;
-    transition: color 0.2s ease;text-decoration: none">⚙️</a>
-<link rel="stylesheet" href="~/css/home.css" />
-<main class="chat-wrapper">
-   
-    <section class="chat-box" id="chatBox">
+    <!-- Sol Panel -->
+    <aside class="sidebar-discord">
+        <!-- Oda Adı -->
+        <div class="room-name">@Model.ServerName</div>
+        <br style="border: 0.5px solid #2f3136;" />
 
-        <ul id="messagesList" class="messages-list">
-            <p style="font-size: 1.2rem;
-    font-weight: bold;
-    opacity: 50%;
-    display: flex
-;
-    align-items: center;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    justify-content: space-around;">@Model.ServerName Odasına girdiniz</p>
+        <!-- Kanallar -->
+        <div class="room-in">
+            <div class="channel-list">
+                <div class="channel"># Genel Sohbet</div>
+                <div class="channel"># Sesli Sohbet</div>
+            </div>
+            <div id="roomModal" class="modal">
+                <div class="modal-content">
+                    <div class="cls-h">
+                        <span id="closeModalBtn" class="close">&times;</span>
+                        <h2>Yeni Oda Oluştur</h2>
+                    </div>
+                    <div id="roomList">
+                        @await Html.PartialAsync("~/Views/AddRoom/AddRoomPartial.cshtml", new TalkRoomDemo.DtoLayer.Dtos.ServerListDto())
+                    </div>
+                </div>
+            </div>
+            <div id="copyNotification2" style="
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4BB543;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s, bottom 0.5s;
+    font-weight: 600;
+    z-index: 1000;
+">
+                Yeni oda Oluşturuldu!
+            </div>
+            <div id="roomModal2" class="modal">
+                <div class="modal-content">
+                    <div class="cls-h">
+                        <span id="closeModalBtn2" class="close">&times;</span>
+                        <h2>Davet Kodunuz</h2>
+                    </div>
+
+                    <!-- Davet Linki girme ve davet kodu oluşturma -->
+                    @await Html.PartialAsync("~/Views/FriendRequest/AcceptInvite.cshtml")
+
+                </div>
+            </div>
+            <div id="copyNotification" style="
+    position: fixed;
+    top: 20px;
+    right: 0%;
+    transform: translateX(-50%);
+    background-color: #4BB543;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s, bottom 0.5s;
+    font-weight: 600;
+    z-index: 1000;
+">
+                Kopyalandı!
+            </div>
+
+            <!-- Sol alt kullanıcı paneli -->
+            <div class="user-panel-bottom">
+                <br style="border: 0.5px solid #2f3136;" />
+                <img src="@User.FindFirst("ImageUrl")?.Value" alt="Profil" class="profile-pic">
+                <span class="username">@User.FindFirst("UserName")?.Value</span>
+                <a href="@Url.Action("Settings", "Home")" class="icon-btn settings-btn">⚙️</a>
+                <button class="icon-btn mic-btn" onclick="toggleVolumePopup()">🎤</button>
+                <div id="volume-popup" class="volume-popup">
+                    <label class="volume-label">
+                        <input type="checkbox" id="muteCheckbox" />
+                        <span>Mute</span>
+                    </label>
+                    <input type="range" min="0" max="1" step="0.01" value="1" id="volumeSlider" />
+                </div>
+            </div>
+        </div>
+
+    </aside>
+    <!-- Chat Alanı -->
+    <main class="chat-area-discord">
+        <ul id="messagesList" class="messages-list-discord">
+            <!-- Mesajlar JS ile eklenecek -->
         </ul>
-       
-    </section>
 
-    <footer class="message-input-container">
-        <form class="message-form" id="messageForm">
-            <input type="text" id="messageInput" name="message" placeholder="Mesajını yaz..." autocomplete="off" />
+        <!-- Mesaj Gönderme Alanı -->
+        <footer class="message-input-container-discord">
+            <input type="text" id="messageInput" name="message" placeholder="Mesaj yaz…" autocomplete="off" />
             <button type="button" id="sendButton">➤</button>
-        </form>
-    </footer>
-</main>
-<script src="~/js/signalr/dist/browser/signalr.js"></script>
-<script>
-        window.currentUser = window.currentUser = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.FindFirst("UserName")?.Value));
-    window.currentUserProfileUrl = window.currentUserProfileUrl = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.FindFirst("ImageUrl")?.Value));
-</script>
-<script src="~/js/chat.js"></script>
+        </footer>
+    </main>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script>
+            window.currentUser = window.currentUser = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.FindFirst("UserName")?.Value));
+        window.currentUserProfileUrl = window.currentUserProfileUrl = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.FindFirst("ImageUrl")?.Value));
+    </script>
+    <script src="~/js/chat.js"></script>
+</div>
 
+
+<style>
+    .room-in{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+    }
+    /* Genel Container */
+    .app-container-discord {
+        display: flex;
+        
+        background: #131621;
+        color: #fff;
+        font-family: "Segoe UI", sans-serif;
+    }
+
+    /* Sol Panel */
+    .sidebar-discord {
+        width: 20%;
+        background: #0b0d13;
+        height:100vh;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 12px;
+        border-right: 1px solid #2f3136;
+    }
+
+    .room-name {
+        font-size: 1.6rem;
+        font-weight: bold;
+        margin-bottom: 12px;
+    }
+
+    .channel-list {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .channel {
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+        .channel:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+    /* Kullanıcı paneli */
+    .user-panel-bottom {
+        
+        background: #0b0d13;
+        padding: 8px 12px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        z-index: 100;
+        position: fixed;
+        bottom: 0px;
+        border: 0.7px solid #2f3136;
+        width:15%;
+    }
+
+
+    .profile-pic {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    .username {
+        font-weight: bold;
+        color: #fff;
+    }
+
+    .icon-btn {
+        background: #171b28;
+        border: none;
+        border-radius: 6px;
+        padding: 4px 6px;
+        cursor: pointer;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .status.online {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #22c55e;
+    }
+
+    .status.offline {
+        background: #6b7280;
+    }
+
+    /* Chat Alanı */
+    .chat-area-discord {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .messages-list-discord {
+        flex: 1;
+        padding: 12px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        list-style: none;
+        margin: 0;
+        background: #0b0d13;
+    }
+
+    .message-input-container-discord {
+        display: flex;
+        padding: 20px;
+        border-top: 1px solid #2f3136;
+        position: fixed;
+        bottom: 0;
+        width: 64%;
+    }
+
+        .message-input-container-discord input {
+            flex: 1;
+            padding: 8px 10px;
+            border-radius: 8px;
+            border: 1px solid #2f3136;
+            background: #0b0d13;
+            color: #fff;
+        }
+
+        .message-input-container-discord button {
+            margin-left: 6px;
+            padding: 6px 12px;
+            background: #6d7cff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #fff;
+        }
+</style>
