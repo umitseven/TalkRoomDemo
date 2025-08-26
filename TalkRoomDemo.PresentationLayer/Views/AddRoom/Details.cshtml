@@ -2,6 +2,7 @@
 
 @{
     Layout = "_HomeLayout";
+    int currentRoomId = ViewBag.CurrentRoomId ?? 0;
 }
 <div class="app-container-discord">
 
@@ -94,7 +95,14 @@
 
     </aside>
     <!-- Chat Alanı -->
+    <a href="@Url.Action("Settings", "AddRoom", new { id = Model.ServerID })" class="icon-btn settings-btn" style="    position: fixed;
+    top: 7px;
+    right: 17%;
+    width: 30px;
+    height: auto;
+    font-size: 24px;padding:8px 8px !important;">⚙️</a>
     <main class="chat-area-discord">
+      
         <ul id="messagesList" class="messages-list-discord">
             <!-- Mesajlar JS ile eklenecek -->
         </ul>

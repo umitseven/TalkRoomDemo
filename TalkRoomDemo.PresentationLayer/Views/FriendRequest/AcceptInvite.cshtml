@@ -1,11 +1,12 @@
 ﻿<form style="margin-bottom:12px;" id="createRoomForm2">
-    <input style="    background: #2a272752;
-    border: solid #505050;
-    border-radius: 1.2rem;
-    height: 20px;
-    padding: 10px;
-    color: white;
-    font-size: 0.8rem;" type="text" id="roomName2" value="#111111" readonly required />
+    <input class="adax" style="padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #36393f;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s;" type="text" id="roomName2" value="#111111" readonly required />
     <button type="submit">Linki Kopyala</button>
 </form>
 <div class="cls-h" style="justify-content: flex-end;">
@@ -13,12 +14,20 @@
     <h2>Davet kodunu girin</h2>
 </div>
 <form method="post" action="/FriendRequest/AcceptInvite" id="inviteForm">
-    <input style="    background: #2a272752;
-    border: solid #505050;
-    border-radius: 1.2rem;
-    height: 20px;
-    padding: 10px;
-    color: white;
-    font-size: 0.8rem;" type="text" id="roomName3" name="inviteCode" /> 
+    <input class="adax" style="padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #36393f;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s;" type="text" id="roomName3" name="inviteCode" />
     <button type="submit">Linki Giriniz</button>
 </form>
+<style>
+    input.adax[type="text"]:focus {
+        background-color: #40444b;
+        box-shadow: 0 0 0 2px #7289da;
+    }
+
+</style>
