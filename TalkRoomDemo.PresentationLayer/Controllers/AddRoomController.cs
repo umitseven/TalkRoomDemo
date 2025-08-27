@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using TalkRoomDemo.businessLayer.Abstract;
+using TalkRoomDemo.DataAccessLayer.AppDbContext;
 using TalkRoomDemo.DtoLayer.Dtos;
 using TalkRoomDemo.EntityLayer.Concrete;
 using TalkRoomDemo.PresentationLayer.Hubs;
@@ -18,8 +19,10 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
         private readonly IHubContext<ChatHub> _hubContext;
         private readonly INotyfService _notyf;
         private readonly IFriendService _friendService;
-        public AddRoomController(IServerService serverService, IHubContext<ChatHub> hubContext, INotyfService notyfService, UserManager<AppUser> userManager, IServerUserService userService, IFriendService friendService)
+        private readonly Context _context;
+        public AddRoomController(IServerService serverService, IHubContext<ChatHub> hubContext, INotyfService notyfService, UserManager<AppUser> userManager, IServerUserService userService, IFriendService friendService, Context context)
         {
+            _context = context;
             _serverService = serverService;
             _userManager = userManager;
             _hubContext = hubContext;
@@ -67,6 +70,7 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
         }
         public async Task<IActionResult> Details(int id)
         {
+            
             var server = await _serverService.GetByIdAsync(id);
             if(server == null) return NotFound();
 
@@ -76,9 +80,21 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
                 ServerName = server.Name,
                 ServerImageUrl = server.ServerImageUrl
             };
-            
+           
             HttpContext.Session.SetString("SelectedRoom", dto.ServerName);
             return View(dto);
+        }
+        public IActionResult RoomMessages (int roomId)
+        {
+            var messages = _context.ServerMessages.Where(m => m.ServerId == roomId).OrderBy(m => m.SendAt).Select(m => new
+            {
+                UserName = m.SenderUser.UserName,   // mesajı atan kullanıcının UserName alanı
+                ProfileUrl = m.SenderUser.ImageUrl, // mesajı atan kişinin profil resmi url’si
+                Text = m.Content,   // mesajın kendisi
+                Time = m.SendAt
+
+            }).ToList();
+            return Json(messages);
         }
         [HttpGet]
         public async Task<IActionResult> Settings(int id)

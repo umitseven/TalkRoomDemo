@@ -49,10 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         scrollToBottom();
     }
-
-    connection.on("ReceiveMessage", (user, profileUrl, message) => {
-        appendMessage(user, profileUrl, message);
-    });
+   
+    connection.on("ReceiveMessage", (user, profileUrl, message) => { appendMessage(user, profileUrl, message); });
 
     connection.on("ReceiveFriendListUpdate", function () {
         console.log("arkadaş listesi güncellendi")
@@ -109,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
  
     connection.start().then(() => {
         console.log("SignalR connected.");
-
+        
         connection.invoke("GetOnlineUsers");
     });
 
@@ -143,7 +141,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const message = messageInput.value.trim();
         if (message === "") return;
 
-        connection.invoke("SendMessage", currentUser, currentUserProfileUrl, message).catch(err => {
+        connection.invoke("SendMessage", currentUser, currentUserProfileUrl, message)
+            .catch(err => {
             console.error("Mesaj gönderme hatası:", err.toString());
         });
 

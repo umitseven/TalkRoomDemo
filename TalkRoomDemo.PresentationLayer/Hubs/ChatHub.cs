@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Build.Framework.Profiler;
 using StackExchange.Redis;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Concurrent;
 using System.Security.Claims;
 using TalkRoomDemo.businessLayer.Abstract;
 using TalkRoomDemo.businessLayer.Concrete;
+using TalkRoomDemo.DataAccessLayer.AppDbContext;
 using TalkRoomDemo.EntityLayer.Concrete;
 
 namespace TalkRoomDemo.PresentationLayer.Hubs
@@ -22,9 +24,9 @@ namespace TalkRoomDemo.PresentationLayer.Hubs
             _serverUserService = serverUserService;
             _onlineCache = onlineUserCache;
         }
+      
         public async Task SendMessage(string user, string profileUrl, string message)
         {
-
             await Clients.All.SendAsync("ReceiveMessage", user, profileUrl, message);
         }
 
