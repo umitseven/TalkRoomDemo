@@ -62,7 +62,7 @@ namespace TalkRoomDemo.DataAccessLayer.AppDbContext
 
             builder.Entity<ServerMessage>()
                 .HasOne(sm => sm.Server)
-                .WithMany(s => s.Messages)
+                .WithMany(s => s.ServerMessages)
                 .HasForeignKey(sm => sm.ServerId)
                 .OnDelete(DeleteBehavior.Restrict); // Cascade yerine Restrict
 

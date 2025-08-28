@@ -17,8 +17,10 @@ namespace TalkRoomDemo.DtoLayer.Dtos
 
         public string Content { get; set; } // mesaj içeriği
         public DateTime SendAt { get; set; } // mesajın gönderildiği zaman
-        
-        
-        
+        public string SendAtString => SendAt.ToString("yyyy-MM-ddTHH:mm:ss"); // mesajın gönderildiği zaman (string formatında)
+
+
+
+
     }
 }

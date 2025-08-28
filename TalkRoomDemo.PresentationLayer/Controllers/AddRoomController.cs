@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using System.Security.Claims;
 using TalkRoomDemo.businessLayer.Abstract;
-using TalkRoomDemo.DataAccessLayer.AppDbContext;
 using TalkRoomDemo.DtoLayer.Dtos;
+using TalkRoomDemo.DtoLayer.ViewModel;
 using TalkRoomDemo.EntityLayer.Concrete;
 using TalkRoomDemo.PresentationLayer.Hubs;
 
@@ -15,14 +15,14 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
     {
         private readonly IServerService _serverService;
         private readonly IServerUserService _userService;
+        private readonly IServerMessageService _serverMessageService;
         private readonly UserManager<AppUser> _userManager;
         private readonly IHubContext<ChatHub> _hubContext;
         private readonly INotyfService _notyf;
         private readonly IFriendService _friendService;
-        private readonly Context _context;
-        public AddRoomController(IServerService serverService, IHubContext<ChatHub> hubContext, INotyfService notyfService, UserManager<AppUser> userManager, IServerUserService userService, IFriendService friendService, Context context)
+        public AddRoomController(IServerService serverService, IHubContext<ChatHub> hubContext, INotyfService notyfService, UserManager<AppUser> userManager, IServerUserService userService, IFriendService friendService, IServerMessageService serverMessageService)
         {
-            _context = context;
+            _serverMessageService = serverMessageService;
             _serverService = serverService;
             _userManager = userManager;
             _hubContext = hubContext;
@@ -74,28 +74,27 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
             var server = await _serverService.GetByIdAsync(id);
             if(server == null) return NotFound();
 
-            var dto = new ServerListDto
-            {
-                ServerID = server.Id,
-                ServerName = server.Name,
-                ServerImageUrl = server.ServerImageUrl
-            };
-           
-            HttpContext.Session.SetString("SelectedRoom", dto.ServerName);
-            return View(dto);
-        }
-        public IActionResult RoomMessages (int roomId)
-        {
-            var messages = _context.ServerMessages.Where(m => m.ServerId == roomId).OrderBy(m => m.SendAt).Select(m => new
-            {
-                UserName = m.SenderUser.UserName,   // mesajı atan kullanıcının UserName alanı
-                ProfileUrl = m.SenderUser.ImageUrl, // mesajı atan kişinin profil resmi url’si
-                Text = m.Content,   // mesajın kendisi
-                Time = m.SendAt
+            var serverMessages = await _serverMessageService.GetAllServerMessagesByServerIdAsync(id);
 
-            }).ToList();
-            return Json(messages);
+            var viewModel = new ServerDetailsViewModel
+            {
+                Server = new ServerListDto
+                {
+                    ServerID = server.Id,
+                    ServerName = server.Name,
+                    ServerImageUrl = server.ServerImageUrl
+                },
+                Messages = serverMessages
+            };
+
+            // Session’a sunucu adını kaydet
+            HttpContext.Session.SetString("SelectedRoom", server.Name);
+
+            // View’e ViewModel gönder
+            return View(viewModel);
         }
+      
+        
         [HttpGet]
         public async Task<IActionResult> Settings(int id)
         {
@@ -126,13 +125,14 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
         public async Task <IActionResult> frUser(int id)
         {
             var friend = await _friendService.TGetFriendChatByUserId(id);
+            await _hubContext.Clients.All.SendAsync("ReceiveFriendData", friend);
             return View(friend);
         }
         [HttpPost]
         public IActionResult DeleteRoom(int id)
         {
             _serverService.TDelete(id);
-            return RedirectToAction("Home", "Index");
+            return RedirectToAction("Index", "Home");
         }
 
     }

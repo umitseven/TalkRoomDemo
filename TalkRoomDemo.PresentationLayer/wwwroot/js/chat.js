@@ -2,15 +2,19 @@
 
 const currentUser = window.currentUser || "Bilinmiyor";
 const currentUserProfileUrl = window.currentUserProfileUrl || "/Login/image/pp.jpg";
+const roomId = window.roomId;
 
 const connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
 
 document.addEventListener("DOMContentLoaded", () => {
-    const messageForm = document.getElementById("messageForm");
     const messageInput = document.getElementById("messageInput");
     const messagesList = document.getElementById("messagesList");
     const sendButton = document.getElementById("sendButton");
 
+    const currentUserId = document.getElementById("currentUserId")?.value;
+    const friendUserId = document.getElementById("friendUserId")?.value; // özel mesaj için
+
+    // === UI Fonksiyonları ===
     function scrollToBottom() {
         messagesList.scrollTop = messagesList.scrollHeight;
     }
@@ -36,39 +40,49 @@ document.addEventListener("DOMContentLoaded", () => {
 
         contentDiv.appendChild(usernameDiv);
         contentDiv.appendChild(messageDiv);
+
         if (user === currentUser) {
-            // Senin mesajlarında önce içerik, sonra profil resmi gelsin
             li.appendChild(contentDiv);
             li.appendChild(img);
         } else {
-            // Karşı taraf için önce resim, sonra içerik
             li.appendChild(img);
             li.appendChild(contentDiv);
         }
         messagesList.appendChild(li);
-
         scrollToBottom();
     }
-   
-    connection.on("ReceiveMessage", (user, profileUrl, message) => { appendMessage(user, profileUrl, message); });
+
+    function addMessageToChat(senderId, message) {
+        const li = document.createElement("li");
+        li.textContent = `${senderId}: ${message}`;
+        messagesList.appendChild(li);
+        scrollToBottom();
+    }
+
+    // === SignalR Eventleri ===
+    connection.on("ReceiveMessage", (user, profileUrl, message) => {
+        appendMessage(user, profileUrl, message);
+    });
+
+    connection.on("UserRecaiverMessage", function (senderId, message) {
+        addMessageToChat(senderId, message);
+    });
 
     connection.on("ReceiveFriendListUpdate", function () {
-        console.log("arkadaş listesi güncellendi")
         $("#friendListContainer").load("/Friend/GetFriendPartial");
     });
+
     connection.on("RecaiveFriendRequstUpdate", function () {
-        console.log("arkadaş davetleri güncellendi")
         $("notificationBox").load("/FriendRequest/GetFriendList");
     });
+
     connection.on("RecaiveFriendListUpdate", function () {
-        console.log("Bildirim kutusu güncellendi")
         fetch("/FriendRequest/GetFriendList")
             .then(response => response.text())
             .then(html => {
                 document.getElementById("notificationPanel").innerHTML = html;
             });
     });
-   
 
     connection.on("UserOnline", function (user) {
         const element= document.querySelector(`[data-userid='${user}'] .status`);
@@ -77,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
             element.classList.add("online");
         }
     });
+
     connection.on("UserOffline", function (user) {
         const element = document.querySelector(`[data-userid='${user}'] .status`);
         if (element) {
@@ -94,75 +109,65 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
-    
+
     connection.on("FriendRequestResponse", function (userId, IsAccepted) {
         if (IsAccepted === 1) {
             alert("Arkadaşlık kabul edildi!");
-            // burada arkadaş listeni AJAX ile yeniden çekebilirsin
         } else if (IsAccepted === 2) {
             alert("Arkadaşlık isteğin reddedildi.");
         }
     });
 
- 
-    connection.start().then(() => {
-        console.log("SignalR connected.");
-        
-        connection.invoke("GetOnlineUsers");
-    });
-
-    function acceptRequest(requestId) {
-        $.post("/FriendRequest/approvedInvite", { requestId: requestId })
-            .done(function (data) {
-                $(`form[data-request-id='${requestId}']`).remove();
-                $("#friendListContainer").load("/Friend/GetFriendPartial");
-                // Karşı tarafa kabul bilgisini gönder
-                connection.invoke("RespondFriendRequest", requestId, 1);
-            })
-            .fail(function (err) {
-                alert("Hata: " + err.responseText);
-            });
-    }
-
-    function rejectRequest(requestId) {
-        $.post("/FriendRequest/RejectInvite", { requestId: requestId })
-            .done(function (data) {
-                $(`form[data-request-id='${requestId}']`).remove();
-                connection.invoke("RespondFriendRequest", requestId, 2);
-            })
-            .fail(function (err) {
-                alert("Hata: " + err.responseText);
-            });
-    }
-
-
-
-    function sendMessage() {
+    // === Mesaj Gönderme Fonksiyonları ===
+    function sendRoomMessage() {
         const message = messageInput.value.trim();
         if (message === "") return;
 
-        connection.invoke("SendMessage", currentUser, currentUserProfileUrl, message)
-            .catch(err => {
-            console.error("Mesaj gönderme hatası:", err.toString());
-        });
+        connection.invoke("SendMessage", roomId, currentUser, currentUserProfileUrl, message)
+            .catch(err => console.error("Mesaj gönderme hatası:", err.toString()));
 
         messageInput.value = "";
         messageInput.focus();
     }
 
-   
-    sendButton.addEventListener("mousedown", (e) => {
-        e.preventDefault(); // input'tan odak çıkmasını engeller
-    });
+    function sendFriendMessage() {
+        const text = messageInput.value.trim();
+        if (text === "" || !friendUserId) return;
+
+        connection.invoke("SendFriendMessage", friendUserId, text)
+            .catch(err => console.error(err.toString()));
+
+        addMessageToChat("Sen", text); // kendi mesajını ekle
+        messageInput.value = "";
+        messageInput.focus();
+    }
+
+    // === Event Binding ===
     sendButton.addEventListener("click", (event) => {
         event.preventDefault();
-        sendMessage();
-        messageInput.focus();
+        if (friendUserId) {
+            sendFriendMessage();
+        } else {
+            sendRoomMessage();
+        }
     });
+
     messageInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
-            sendMessage();
+            if (friendUserId) {
+                sendFriendMessage();
+            } else {
+                sendRoomMessage();
+            }
         }
     });
+
+    // === Bağlantıyı başlat ===
+    connection.start()
+        .then(() => {
+            console.log("SignalR connected.");
+            connection.invoke("GetOnlineUsers");
+        })
+        .catch(err => console.error("SignalR connection error:", err.toString()));
 });

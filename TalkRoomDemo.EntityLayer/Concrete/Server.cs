@@ -17,7 +17,7 @@ namespace TalkRoomDemo.EntityLayer.Concrete
         public string ServerImageUrl { get; set; } // Sunucuya ait resim URL'si
 
         // Sunucuya ait mesajlar
-        public ICollection<ServerMessage> Messages { get; set; } = new List<ServerMessage>(); // Sunucu mesajları
+        public ICollection<ServerMessage> ServerMessages { get; set; } = new List<ServerMessage>(); // Sunucu mesajları
 
         // Sunucu üyeleri
         public ICollection<ServerUser> ServerUsers { get; set; } = new List<ServerUser>(); // Sunucu üyeleri

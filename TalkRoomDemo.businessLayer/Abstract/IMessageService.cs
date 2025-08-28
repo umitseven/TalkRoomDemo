@@ -11,5 +11,6 @@ namespace TalkRoomDemo.businessLayer.Abstract
     public interface IMessageService :IGenericService<Message>
     {
        Task<List<MessageDto>> TGeAlltMessagesByUserId(int userId);
+        Task TInsertAsync(Message entity);
     }
 }

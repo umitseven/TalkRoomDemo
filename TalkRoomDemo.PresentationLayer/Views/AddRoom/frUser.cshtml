@@ -13,14 +13,19 @@
         <button id="toggleChat" class="toggle-btn">▲</button>
     </div>
 
-    <div class="chat-body" id="chatBody">
-        <!-- Mesajlar JS ile eklenecek -->
+    <div class="chat-body">
+        <ul id="messagesList" style="list-style: none; padding: 0; margin: 0; max-height: 400px; overflow-y: auto;">
+            <!-- Mesajlar JS ile buraya eklenecek -->
+        </ul>
     </div>
 
-    <div class="chat-footer">
-        <input type="text" id="chatInput" placeholder="Mesaj yaz…" />
-        <button id="sendBtn">Gönder</button>
+    <div class="chat-footer" style="display: flex; gap: 10px; margin-top: 10px;">
+        <input type="hidden" id="currentUserId" value="@Model.UserId" /> <!-- Oturum açan kullanıcının ID'si -->
+        <input type="hidden" id="friendUserId" value="@Model.FriendId" /> <!-- Mesaj gönderilen arkadaşın ID'si -->
+        <input type="text" id="messageInput" placeholder="Mesaj yaz…" style="flex: 1; padding: 8px;" />
+        <button type="button" id="sendButton" style="padding: 8px 16px;">Gönder</button>
     </div>
+
 </div>
 <style>
     /* Genel popup alanı */
@@ -207,13 +212,15 @@
    
 
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.8/signalr.min.js"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/js/chat.js"></script>
 <script>
     document.getElementById("toggleChat").addEventListener("click", function () {
         document.getElementById("chatPopup").classList.toggle("collapsed");
         this.textContent = document.getElementById("chatPopup").classList.contains("collapsed") ? "▲" : "▼";
     });
+    window.friendId = @Model.FriendId; // Arkadaşın ID'si
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.8/signalr.min.js"></script>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="~/js/home.js"></script>

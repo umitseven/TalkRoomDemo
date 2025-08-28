@@ -720,6 +720,7 @@ body, html {
 
 .message-text {
     font-size: 0.95rem;
+    text-align: justify;
 }
 
 /* === MESAJ GÝRÝÞÝ === */

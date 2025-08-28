@@ -22,20 +22,23 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
         }
         public async Task<List<ServerMessageDto>> GetAllServerMessagesByServerIdAsync(int serverId, int page = 1, int pageSize = 20)
         {
-            var skip = (page - 1) * pageSize;
-            var value = await _context.ServerMessages
-                .Where(sm => sm.ServerId == serverId).OrderByDescending(sm => sm.SendAt)
-                .Skip(skip).Take(pageSize).Select(sm => new ServerMessageDto
-                {
-                    ServerId = sm.ServerId,
-                    ServerName = sm.Server.Name,
-                    SenderId = sm.SenderUserId,
-                    SenderName = sm.SenderUser.UserName,
-                    SenderAvatarUrl = sm.SenderUser.ImageUrl,
-                    Content = sm.Content,
-                    SendAt = sm.SendAt
-                }).ToListAsync();
-            return value;
+            var messages = await _context.ServerMessages
+        .Where(sm => sm.ServerId == serverId)
+        .OrderBy(sm => sm.SendAt) // eski mesajdan yeniye
+        .Select(sm => new ServerMessageDto
+        {
+             ServerId = sm.ServerId,
+             ServerName = sm.Server.Name,
+             SenderId = sm.SenderUserId,
+             SenderName = sm.SenderUser.UserName,
+             SenderAvatarUrl = sm.SenderUser.ImageUrl,
+             Content = sm.Content,
+             SendAt = sm.SendAt
+         })
+         .ToListAsync();
+
+            return messages;
+
         }
     }
 }

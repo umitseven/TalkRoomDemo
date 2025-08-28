@@ -11,5 +11,6 @@ namespace TalkRoomDemo.businessLayer.Abstract
     public interface IServerMessageService : IGenericService<ServerMessage>
     {
         Task<List<ServerMessageDto>> GetAllServerMessagesByServerIdAsync(int serverId, int page = 1, int pageSize = 20);
+        Task TInsertAsync(ServerMessage entity);
     }
 }

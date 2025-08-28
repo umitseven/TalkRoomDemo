@@ -47,5 +47,10 @@ namespace TalkRoomDemo.businessLayer.Concrete
         {
             return await _messageDal.GetAllMessagesByUserIdAsync(userId);
         }
+
+        public async Task TInsertAsync(Message entity)
+        {
+            await _messageDal.InsertAsync(entity);
+        }
     }
 }

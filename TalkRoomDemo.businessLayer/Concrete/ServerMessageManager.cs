@@ -44,6 +44,11 @@ namespace TalkRoomDemo.businessLayer.Concrete
             _serverMessageDal.Insert(entity);
         }
 
+        public async Task TInsertAsync(ServerMessage entity)
+        {
+            await _serverMessageDal.InsertAsync(entity);
+        }
+
         public void TUpdate(ServerMessage entity)
         {
             _serverMessageDal.Update(entity);

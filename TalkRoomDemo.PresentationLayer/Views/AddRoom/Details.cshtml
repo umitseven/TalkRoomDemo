@@ -1,4 +1,5 @@
-﻿@model TalkRoomDemo.DtoLayer.Dtos.ServerListDto
+﻿@using Newtonsoft.Json
+@model TalkRoomDemo.DtoLayer.ViewModel.ServerDetailsViewModel
 
 @{
     Layout = "_HomeLayout";
@@ -8,7 +9,7 @@
     <!-- Sol Panel -->
     <aside class="sidebar-discord">
         <!-- Oda Adı -->
-        <div class="room-name">@Model.ServerName</div>
+        <div class="room-name">@Model.Server.ServerName</div>
         <br style="border: 0.5px solid #2f3136;" />
 
         <!-- Kanallar -->
@@ -94,7 +95,7 @@
 
     </aside>
     <!-- Chat Alanı -->
-    <a href="@Url.Action("Settings", "AddRoom", new { id = Model.ServerID })" class="icon-btn settings-btn" style="    position: fixed;
+    <a href="@Url.Action("Settings", "AddRoom", new { id = Model.Server.ServerID })" class="icon-btn settings-btn" style="    position: fixed;
     top: 7px;
     right: 17%;
     width: 30px;
@@ -104,23 +105,47 @@
       
         <ul id="messagesList" class="messages-list-discord">
             <!-- Mesajlar JS ile eklenecek -->
+           
         </ul>
 
         <!-- Mesaj Gönderme Alanı -->
         <footer class="message-input-container-discord">
-            <input type="text" id="messageInput" name="message" placeholder="Mesaj yaz…" autocomplete="off" />
+
+            <input type="hidden" id="currentRoomId" name="currentRoomId" value="@Model.Server.ServerID" />
+                <input type="text" id="messageInput" name="content" placeholder="Mesaj yaz…" autocomplete="off" />
             <button type="button" id="sendButton">➤</button>
+           
         </footer>
     </main>
     <script src="~/js/signalr/dist/browser/signalr.js"></script>
     <script>
             window.currentUser = window.currentUser = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.FindFirst("UserName")?.Value));
         window.currentUserProfileUrl = window.currentUserProfileUrl = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(User.FindFirst("ImageUrl")?.Value));
+        
+        window.roomId = window.roomId = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Server.ServerID));
     </script>
     <script src="~/js/chat.js"></script>
     <script>
-            
+             const messages = @Html.Raw(JsonConvert.SerializeObject(Model.Messages));
+
+        const messagesList = document.getElementById("messagesList");
+        messages.forEach(msg => {
+            const mine = msg.SenderName === '@User.FindFirst("UserName")?.Value' ? 'mine' : 'other';
+            const li = document.createElement('li');
+            li.className = mine;
+            li.innerHTML = `
+                   <div class="message-content">
+                <div class="message-username">${msg.SenderName}</div>
+                <div class="message-text">${msg.Content}</div>
+            </div>
+            <img class="message-profile-pic" src="${msg.SenderAvatarUrl}" />
+        `;
+
+        messagesList.appendChild(li);
+        });
+
     </script>
+
 </div>
 
 
