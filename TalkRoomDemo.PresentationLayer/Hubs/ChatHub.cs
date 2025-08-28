@@ -1,13 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Build.Framework.Profiler;
-using StackExchange.Redis;
-using System;
 using System.Collections.Concurrent;
-using System.Security.Claims;
 using TalkRoomDemo.businessLayer.Abstract;
 using TalkRoomDemo.businessLayer.Concrete;
-using TalkRoomDemo.DataAccessLayer.AppDbContext;
 using TalkRoomDemo.EntityLayer.Concrete;
 
 namespace TalkRoomDemo.PresentationLayer.Hubs
@@ -66,11 +61,17 @@ namespace TalkRoomDemo.PresentationLayer.Hubs
 
                 await _serverMessageService.TInsertAsync(serverMessage);
 
-                // Grup yerine tüm kullanıcılara gönder
-                await Clients.All.SendAsync("ReceiveMessage", user, profileUrl, message);
-                    
-            
+            // Grup yerine tüm kullanıcılara gönder
+            await Clients.Group(roomId.ToString())
+     .SendAsync("ReceiveMessage", user, profileUrl, message);
+
+
         }
+        public async Task JoinRoom(string roomId)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
+        }
+         
         public async Task SendFriendData(object friendData)
         {
             await Clients.All.SendAsync("ReceiveFriendData", friendData);

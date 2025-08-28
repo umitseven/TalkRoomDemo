@@ -168,6 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(() => {
             console.log("SignalR connected.");
             connection.invoke("GetOnlineUsers");
+            connection.invoke("JoinRoom", roomId.toString());
         })
         .catch(err => console.error("SignalR connection error:", err.toString()));
 });
