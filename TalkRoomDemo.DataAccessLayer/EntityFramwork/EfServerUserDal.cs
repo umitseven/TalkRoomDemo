@@ -35,19 +35,17 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
             return values;
         }
 
-        public async Task<List<ServerUserDto>> GetAllServerUserListAsync(int userId)
+        public async Task<List<ServerUserDto>> GetAllServerUserListAsync(int serverId)
         {
             var servers = await (from su in _context.ServerUsers
-                                 join s in _context.Servers on su.ServerId equals s.Id
-                                 join u in _context.Users on s.CreatorUserId equals u.Id
-                                 where su.UserId == userId
+                                 join s in _context.Users on su.UserId equals s.Id
+                                 where su.ServerId == serverId
                                  select new ServerUserDto
                                  {
-                                     ServerID = s.Id,
-                                     ServerName = s.Name,
-                                     ServerImageUrl = s.ServerImageUrl,
-                                     CreatorUserId = s.CreatorUserId,
-                                     CreatorUserName = u.UserName
+                                     UserId = s.Id,
+                                     UserName = s.UserName,
+                                     AvatarUrl = s.ImageUrl,
+                                     
                                  }).ToListAsync();
             Console.WriteLine("ServerUser eşleşen kayıt sayısı: " + servers.Count);
 

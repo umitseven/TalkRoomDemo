@@ -17,6 +17,34 @@
             <div class="channel-list">
                 <div class="channel"># Genel Sohbet</div>
                 <div class="channel"># Sesli Sohbet</div>
+
+
+                <aside class="ServerUsers-bar">
+                    <div class="chanel-header" style="font-size:18px;display:flex; font-weight:600;padding: 10px; margin-top: 1rem; font-size: large;flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start; ">
+                        Odadaki Kişiler
+                        <button id="openInviteModal" class="add-room-btn">＋</button>
+                    </div>
+                    <div style="border: 0.5px solid #2f3136;" class="element"></div>
+
+
+                    <!-- Odadaki Kişilerin listesi -->
+
+                    <div id="RoomFriends">
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.8/signalr.min.js"></script>
+
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                        <script>
+                            $(document).ready(function () {
+                                $("#RoomFriends").load("/AddRoom/GetServerUsers?serverId=@Model.Server.ServerID");
+                            });
+                        </script>
+                    </div>
+
+                </aside>
+
+
             </div>
             <div id="roomModal" class="modal">
                 <div class="modal-content">
@@ -69,7 +97,7 @@
     border-radius: 5px;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.5s, bottom 0.5s;
+    transition: opacity 0.5s, bottom 0.5s;  
     font-weight: 600;
     z-index: 1000;
 ">
@@ -94,6 +122,28 @@
         </div>
 
     </aside>
+
+    <!--kullanıcı davet modalı -->
+
+    <div id="inviteModal" class="friend-modal">
+        <div class="friend-modal-content" style="width:400px;">
+            <div class="cls-h" style="display: flex;
+justify-content: center;
+    align-items: center;
+    flex-direction: row;">
+                <h2>Kullanıcı Davet Et</h2>
+                <span id="closeInviteModal" class="close">&times;</span>
+            </div>
+
+            <p>Odaya davet etmek istediğiniz kullanıcının adını girin:</p>
+            <input type="text" id="inviteInput" placeholder="Kullanıcı adı örn:umtsvn" style="width:100%;padding:8px;margin:10px 0;border-radius:5px;border:1px solid #555;background:#2f3136;color:white;">
+            <button id="sendInviteBtn" style="width:100%;padding:10px;background:#5865f2;color:white;border:none;border-radius:5px;font-weight:600;cursor:pointer;">
+                Davet Gönder
+            </button>
+        </div>
+    </div>
+
+
     <!-- Chat Alanı -->
     <a href="@Url.Action("Settings", "AddRoom", new { id = Model.Server.ServerID })" class="icon-btn settings-btn" style="    position: fixed;
     top: 7px;
@@ -145,6 +195,54 @@
         });
 
     </script>
+    <script>
+        // Modal açma/kapama
+        const inviteModal = document.getElementById("inviteModal");
+        const openInviteModalBtn = document.getElementById("openInviteModal");
+        const closeInviteModalBtn = document.getElementById("closeInviteModal");
+
+        openInviteModalBtn.onclick = function () {
+            inviteModal.style.display = "block";
+        }
+
+        closeInviteModalBtn.onclick = function () {
+            inviteModal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == inviteModal) {
+                inviteModal.style.display = "none";
+            }
+        }
+
+        // Davet gönderme butonu
+        document.getElementById("sendInviteBtn").addEventListener("click", function () {
+            const username = document.getElementById("inviteInput").value.trim();
+            const serverId = @Model.Server.ServerID; // isim küçük harfli
+
+            if (!username) return; // boş gönderme engellendi
+
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = '@Url.Action("GetServerUser", "AddRoom")';
+
+            const inputUser = document.createElement("input");
+            inputUser.type = "hidden";
+            inputUser.name = "UserName";
+            inputUser.value = username;
+            form.appendChild(inputUser);
+
+            const inputServer = document.createElement("input");
+            inputServer.type = "hidden";
+            inputServer.name = "serverId";
+            inputServer.value = serverId; // doğru değişken
+            form.appendChild(inputServer);
+
+            document.body.appendChild(form);
+            form.submit();
+        });
+    </script>
+
 
 </div>
 
@@ -351,6 +449,41 @@
 .messages-list-discord::-webkit-scrollbar-thumb:hover {
     background-color: #40444b;
 }
+
+
+@*bu kısım odaya arkadaş davet modalının css'leri*@
+    .friend-modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.7);
+    }
+
+    .friend-modal-content {
+        background-color: #36393f;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 30%;
+        border-radius: 10px;
+        color: white;
+    }
+
+    .close {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+        .close:hover {
+            color: white;
+        }
 </style>
 
 

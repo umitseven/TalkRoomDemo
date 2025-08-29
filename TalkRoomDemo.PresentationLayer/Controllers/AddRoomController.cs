@@ -47,18 +47,22 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
         {
             var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
             int UserId = int.Parse(userIdStr);
-            
+            Random random = new Random();
+            int code = random.Next(100000, 999999);
+            string ServerRandomCode = $"#{code}";
+
             var server = new Server
             {
                 Name = dto.ServerName,
                 CreatorUserId = UserId,
-                ServerImageUrl = dto.ServerImageUrl ?? "/Login/image/RoomIcon.svg"
+                ServerImageUrl = dto.ServerImageUrl ?? "/Login/image/RoomIcon.svg",
+                ServerCode = ServerRandomCode
             };
             _serverService.TInsert(server);
 
             var serverUser = new ServerUser
             {
-                UserId = UserId, //giren kullanı
+                UserId = UserId, 
                 ServerId = server.Id,
                 JoinedAt = DateTime.Now,
                 Role = "Owner"
@@ -67,6 +71,34 @@ namespace TalkRoomDemo.PresentationLayer.Controllers
             
             _notyf.Success("Yeni oda Başarılı bir şekilde kuruldu.");
             return RedirectToAction("Details", new { id = server.Id });
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetServerUser(string userName, int serverId)
+        {
+            var user =await _userManager.FindByNameAsync(userName);
+            var serveruser = new ServerUser
+            {
+                UserId = user.Id,
+                ServerId = serverId,
+                Role = "Owner",
+            };
+            _userService.TInsert(serveruser);
+            _notyf.Success($"{user.UserName} Odaya başarılı bir şekilde eklendi.");
+            return RedirectToAction("Details", new { id = serverId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetServerUsers(int serverId)
+        {
+            try
+            {
+                var users = await _userService.GetAllServerUserListAsync(serverId);
+                return PartialView("GetServerUsers", users);
+            }
+            catch (Exception ex)
+            {
+                return Content("Hata: " + ex.Message);
+            }
         }
         public async Task<IActionResult> Details(int id)
         {

@@ -71,6 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
     connection.on("ReceiveFriendListUpdate", function () {
         $("#friendListContainer").load("/Friend/GetFriendPartial");
     });
+    connection.on("#", function () {
+        $("#RoomFriends").load("/AddRoom/GetServerUsers");
+    });
 
     connection.on("RecaiveFriendRequstUpdate", function () {
         $("notificationBox").load("/FriendRequest/GetFriendList");

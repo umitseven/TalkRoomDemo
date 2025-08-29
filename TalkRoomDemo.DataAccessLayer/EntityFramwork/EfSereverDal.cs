@@ -46,9 +46,11 @@ namespace TalkRoomDemo.DataAccessLayer.EntityFramwork
         {
             var server = _context.Servers
                 .Include(s => s.ServerUsers)
+                .Include(s => s.ServerMessages)
                 .FirstOrDefault(s => s.Id == id);
             if(server != null)
             {
+                _context.ServerMessages.RemoveRange(server.ServerMessages);
                 _context.ServerUsers.RemoveRange(server.ServerUsers);
                 _context.Servers.Remove(server);
                 _context.SaveChanges();

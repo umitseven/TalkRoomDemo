@@ -1,0 +1,17 @@
+﻿@model List<TalkRoomDemo.DtoLayer.Dtos.ServerUserDto>
+
+@foreach (var user in Model)
+{
+    <div class="channel">
+        <div class="user-info">
+            <img src="@user.AvatarUrl" alt="Profil" class="profile-pic">
+            <div class="user-details" data-userid="@user.UserId">
+                <span class="username" style="font-weight: 600; text-decoration: none; color: white;">
+                    @user.UserName
+                </span>
+                <span class="status @(user.IsOnline ? "online" : "offline")"></span>
+            </div>
+        </div>
+    </div>
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.8/signalr.min.js"></script>
